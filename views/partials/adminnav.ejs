@@ -1,0 +1,114 @@
+<section>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="/order/menu">Chef Vicky's Kitchen</a>
+			<button
+				class="navbar-toggler"
+				type="button"
+				data-bs-toggle="collapse"
+				data-bs-target="#navbarNav"
+				aria-controls="navbarNav"
+				aria-expanded="false"
+				aria-label="Toggle navigation"
+			>
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNavDropdown">
+				<div class="navbar-nav">
+					<div class="nav-item dropdown">
+						<a
+							class="nav-link dropdown-toggle border-end pe-2"
+							href="#"
+							id="navbarDropdownMenuLink"
+							role="button"
+							data-bs-toggle="dropdown"
+							aria-expanded="false"
+						>
+							Products
+						</a>
+						<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+							<li>
+								<a class="dropdown-item" href="/admin/product-view"
+									>View Products</a
+								>
+							</li>
+							<li>
+								<a class="dropdown-item" href="/admin/product-create"
+									>New Product</a
+								>
+							</li>
+						</ul>
+					</div>
+					<div class="nav-item dropdown">
+						<a
+							class="nav-link dropdown-toggle border-end pe-2"
+							href="#"
+							id="navbarDropdownMenuLink"
+							role="button"
+							data-bs-toggle="dropdown"
+							aria-expanded="false"
+						>
+							Orders
+						</a>
+						<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+							<li>
+								<a class="dropdown-item" href="#">Upcoming Orders</a>
+							</li>
+							<li>
+								<a class="dropdown-item" href="#">Completed Orders</a>
+							</li>
+						</ul>
+					</div>
+					<div class="nav-item dropdown">
+						<a
+							class="nav-link dropdown-toggle border-end pe-2"
+							href="#"
+							id="navbarDropdownMenuLink"
+							role="button"
+							data-bs-toggle="dropdown"
+							aria-expanded="false"
+						>
+							Promotions
+						</a>
+						<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+							<li>
+								<a class="dropdown-item" href="#">View Promotions</a>
+							</li>
+							<li>
+								<a class="dropdown-item" href="#">Create promotion</a>
+							</li>
+						</ul>
+					</div>
+					<div class="nav-item dropdown">
+						<a
+							class="nav-link dropdown-toggle border-end pe-2"
+							href="#"
+							id="navbarDropdownMenuLink"
+							role="button"
+							data-bs-toggle="dropdown"
+							aria-expanded="false"
+						>
+							Account
+						</a>
+						<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+							<% if(!currentUser) { %>
+							<li>
+								<a class="dropdown-item" href="/admin/login">Login</a>
+							</li>
+							<% } else{ %>
+							<li>
+								<a class="dropdown-item" href="/admin/logout">Logout</a>
+							</li>
+							<li>
+								<a class="dropdown-item" href="/admin/register"
+									>Create new admin</a
+								>
+							</li>
+							<%} %>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
+</section>

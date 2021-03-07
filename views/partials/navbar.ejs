@@ -1,0 +1,53 @@
+<section>
+	<nav class="navbar navbar-dark bg-dark px-2">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="/">Chef Vicky's Kitchen</a>
+			<div class="navbar-nav d-flex flex-row justify-content-end">
+				<% if(!currentUser) { %>
+				<div class="me-2 border-end pe-2">
+					<a class="nav-link" href="/login">Login</a>
+				</div>
+				<div class="me-2"><a class="nav-link" href="/register">Sign Up</a></div>
+				<% } else if(currentUser && isAdmin){ %>
+				<div class="me-2 border-end pe-2">
+					<a class="nav-link" href="/logout">Logout</a>
+				</div>
+				<div class="me-2">
+					<a class="nav-link" href="/admin/product-view">To Admin</a>
+				</div>
+				<% } else { %>
+				<a class="nav-link" href="/logout">Logout</a>
+				<% } %>
+			</div>
+		</div>
+	</nav>
+</section>
+<section>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom mb-3">
+		<div class="container-fluid justify-content-end">
+			<button
+				class="navbar-toggler"
+				type="button"
+				data-bs-toggle="collapse"
+				data-bs-target="#navbarNavAltMarkup"
+				aria-controls="navbarNavAltMarkup"
+				aria-expanded="false"
+				aria-label="Toggle navigation"
+			>
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+				<div class="navbar-nav">
+					<div class="me-2 border-end pe-2">
+						<a class="nav-link" href="/order/menu">Menu</a>
+					</div>
+					<div class="navbar-nav">
+						<div class="me-2 border-end pe-2">
+							<a class="nav-link" href="/order/view-cart">View Cart</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
+</section>

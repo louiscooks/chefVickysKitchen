@@ -1,0 +1,74 @@
+<% layout('layouts/admintemplate') %>
+<div class="container">
+	<div class="col-6 offset-3">
+		<div class="col-9">
+			<div class="row">
+				<div class="col"><h1><%= category %></h1></div>
+				<div class="col">
+					<div class="dropdown mt-2">
+						<a
+							class="btn btn-secondary dropdown-toggle"
+							href="#"
+							role="button"
+							id="dropdownMenuLink"
+							data-bs-toggle="dropdown"
+							aria-expanded="false"
+						>
+							Sort By
+						</a>
+						<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+							<li>
+								<a class="dropdown-item" href="/admin/product-view"
+									>All Products</a
+								>
+							</li>
+							<% for(let cat of categories){ %>
+							<li>
+								<a
+									class="dropdown-item"
+									href="/admin/product-view?category=<%= cat %>"
+									><%= cat %></a
+								>
+							</li>
+							<% } %>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<% for(let product of products){ %>
+		<div class="row">
+			<div class="card mb-3 pt-3">
+				<img src="<%= product.image %>" class="card-img-top" />
+				<div class="card-body">
+					<h5 class="card-title"><%=product.name %></h5>
+					<h6 class="card-subtitle mb-2 text-muted"><%=product.category %></h6>
+					<p class="card-text"><%= product.ingredients%></p>
+					<div class="mb-3">
+						<p class="card-text">Price per unit: $<%= product.price%></p>
+					</div>
+					<div class="col-3">
+						<div class="row">
+							<div class="col">
+								<a
+									class="btn btn-info"
+									href="/admin/product/<%= product._id %>/edit"
+									>Edit</a
+								>
+							</div>
+							<div class="col">
+								<form
+									action="/admin/product/<%= product._id %>?_method=DELETE"
+									method="POST"
+								>
+									<button class="btn btn-danger">Delete</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<% } %>
+	</div>
+</div>
