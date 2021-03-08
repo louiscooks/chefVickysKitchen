@@ -26,7 +26,7 @@ module.exports.register = async (req, res, next) => {
 		const registeredUser = await User.register(user, password);
 		registeredUser.shoppingCart = req.session.cart;
 		await registeredUser.save();
-		console.log(registeredUser);
+		console.log("registered user has session cart saved", registeredUser);
 		req.login(registeredUser, (err) => {
 			if (err) return next(err);
 			req.flash("success", "Welcome to the Chef Vicky's Kitchen!");

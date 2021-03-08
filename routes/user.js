@@ -4,11 +4,12 @@ const catchAsync = require("../utilities/catchAsync");
 const user = require("../controllers/user");
 const authenticateUser = require("../middleware/authenticateUser");
 const checkForAdmin = require("../middleware/checkForAdmin");
+const checkForCart = require("../middleware/checkForCart");
 
 router.get("/login", user.renderLogin);
 router.post("/login", authenticateUser, user.login);
-router.get("/register", user.renderRegister);
-router.post("/register", catchAsync(user.register));
+router.get("/register", checkForCart, user.renderRegister);
+router.post("/register", checkForCart, catchAsync(user.register));
 router.get("/logout", user.logout);
 router.get("/admin/login", user.renderAdminLogin);
 router.get("/admin/register", checkForAdmin, user.renderAdminRegister);
