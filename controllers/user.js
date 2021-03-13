@@ -1,9 +1,7 @@
 const User = require("../models/user");
 
-module.exports.renderLogin = (req, res) => {
-	res.render("user/login");
-};
 module.exports.login = (req, res) => {
+	console.log("this is req.user", req.user);
 	console.log("this is req.user.isAdmin", req.user.isAdmin);
 	if (req.user.isAdmin === true) {
 		console.log("this is admin", req.user.isAdmin);
@@ -15,9 +13,6 @@ module.exports.login = (req, res) => {
 	const redirectUrl = req.session.returnTo || "/order/menu";
 	delete req.session.returnTo;
 	res.redirect(redirectUrl);
-};
-module.exports.renderRegister = (req, res) => {
-	res.render("user/register");
 };
 module.exports.register = async (req, res, next) => {
 	try {

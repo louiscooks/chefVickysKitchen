@@ -94,7 +94,8 @@ module.exports.finalizeCart = async (req, res) => {
 				await Cart.findByIdAndUpdate(
 					id,
 					{
-						$pull: { items: { _id: element._id } }
+						$pull: { items: { _id: element._id } },
+						$inc: { totalQty: element.qty }
 					},
 					{ new: true }
 				);

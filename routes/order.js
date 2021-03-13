@@ -5,7 +5,7 @@ const checkForCart = require("../middleware/checkForCart");
 
 const order = require("../controllers/order");
 
-router.get("/menu", checkForCart, catchAsync(order.showMenu));
+router.get("/menu", catchAsync(order.showMenu));
 router.get("/view-cart", checkForCart, catchAsync(order.showCart));
 router.post("/add/:id", checkForCart, catchAsync(order.addToCart));
 router.put("/checkout/:id", catchAsync(order.finalizeCart));

@@ -16,6 +16,7 @@ const checkForCart = async function (req, res, next) {
 	}
 	if (req.user) {
 		const cart = await Cart.findById(req.user.shoppingCart);
+		console.log("this is req.user shopping cart", cart);
 		if (cart._id !== req.session.cart) {
 			console.log("save user cart to session triggered");
 			req.session.cart = cart._id;

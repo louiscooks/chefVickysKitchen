@@ -1,11 +1,18 @@
 <% layout('layouts/boilerplate') %>
-
-<h1>View Cart</h1>
+<div class="container-md">
 <h2>YOUR CART</h2>
 
 <form action="/order/checkout/<%= yourCart %>?_method=PUT" method="POST">
 	<div class="row">
-		<div class="col-6">
+		<div class="col">
+			<% if(cart.items.length === 0){ %>
+			<div class="card">
+				<div class="card-body d-flex justify-content-end">
+					<p class="card-text me-auto">There are no items in your cart.</p>
+					<a class="btn btn-danger btn-md " href="/order/menu">View Menu</a>
+				</div>
+			</div>
+				<% } %>  
 			<%for(let item of cart.items){ %>
 			<div class="card mb-3" style="max-width: 540px">
 				<div class="row g-0">
@@ -25,6 +32,7 @@
 							<div>
 								<label for="speciali">Any modifications?</label>
 								<textarea
+								class="form-control"
 									name="<%=item._id%>[specialInstructions]"
 									id="speciali"
 									cols="50"
@@ -40,42 +48,33 @@
 
 			<% } %>
 		</div>
-		<div class="col-6 mb-3">
-            <div class="row">
+		<div class="col">
+            
                 <div class="card mb-3">
                     <div class="card-body">
                         <h5 class="card-title">Select order date</h5>
                         <input type="date" name="deliveryDate" min="<%= cart.createdAt.format("yyyy-mm-dd") %>" >
                     </div>
                  </div>
-            </div>
-            <div class="row">
+            
 			<div class="card mb-3">
 				<div class="card-body">
                     <h5 class="card-title"><%= cart.totalQty%> items in cart</h5>
-					<ul>
+					<ul style="list-style-type: none; margin:0; padding:0;" class="mb-3">
 						<%for (let item of cart.items) {%>
 						<li><%= item.product.name %> x<%= item.qty %></li>
 						<% } %>
                     </ul>
-                    <p>TOTAL</p>
+					<button type="submit" class="btn btn-md btn-primary" name="action" value="update_button">
+						Save Changes
+					</button>
+					<button type="submit" class="btn btn-md btn-success" name="action" value="checkout_button" <%= cart.totalQty === 5 ? '' : 'disabled' %>>
+						Checkout
+					</button>
 				</div>
-			</div>
-<div class="col-6">
-	<div class="row">
-		<div class="col">
-			<button type="submit" class="btn btn-md btn-info" name="action" value="update_button">
-				Save Changes
-			</button></div>
-		<div class="col">
-			<button type="submit" class="btn btn-md btn-primary" name="action" value="checkout_button" <%= cart.totalQty === 5 ? '' : 'disabled' %>>
-				Checkout
-            </button>
-		</div>
-	</div>
-</div>
+			
 			
         </div>
-		</div>
 	</div>
 </form>
+</div>

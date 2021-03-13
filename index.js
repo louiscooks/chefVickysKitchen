@@ -59,10 +59,7 @@ app.use((req, res, next) => {
 	res.locals.success = req.flash("success");
 	res.locals.error = req.flash("error");
 	res.locals.currentUser = req.user;
-	res.locals.isAdmin = false;
-	if (req.user) {
-		res.locals.isAdmin = req.user.isAdmin;
-	}
+	res.locals.userCart = req.session.cart;
 	next();
 });
 //home page

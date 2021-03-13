@@ -1,30 +1,142 @@
-<section>
-	<nav class="navbar navbar-dark bg-dark px-2">
-		<div class="container-fluid">
+<header>
+	<nav class="navbar navbar-dark bg-dark px-2 ">
+		<div class="container-md">
 			<a class="navbar-brand" href="/">Chef Vicky's Kitchen</a>
-			<div class="navbar-nav d-flex flex-row justify-content-end">
+			<div class="navbar-nav d-flex flex-md-row flex-sm-wrap">
+				<div class="me-3">
+				<a class="nav-link text-white fw-bold" href="#">START YOUR ORDER</a>
+			</div>
 				<% if(!currentUser) { %>
-				<div class="me-2 border-end pe-2">
-					<a class="nav-link" href="/login">Login</a>
-				</div>
-				<div class="me-2"><a class="nav-link" href="/register">Sign Up</a></div>
-				<% } else if(currentUser && isAdmin){ %>
-				<div class="me-2 border-end pe-2">
-					<a class="nav-link" href="/logout">Logout</a>
-				</div>
+				<!-- Button trigger modal -->
 				<div class="me-2">
-					<a class="nav-link" href="/admin/product-view">To Admin</a>
+				<a
+					type="button"
+					class="btn btn-light btn-md"
+					data-bs-toggle="modal"
+					data-bs-target="#loginModal"
+				>
+					Login
+				</a>
+			</div>
+				<!-- Modal -->
+				<div
+					class="modal fade"
+					id="loginModal"
+					tabindex="-1"
+					aria-labelledby="exampleModalLabel"
+					aria-hidden="true"
+				>
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">Login</h5>
+								<button
+									type="button"
+									class="btn-close"
+									data-bs-dismiss="modal"
+									aria-label="Close"
+								></button>
+							</div>
+							<div class="modal-body">
+								<form action="/login" method="POST" class="needs-validation" novalidate>
+								<div class="mb-3">
+									<label class="form-label" for="username">Username*</label>
+									<input
+										class="form-control"
+										type="text"
+										name="username"
+										id="username"
+										required
+									/>
+								</div>
+								<div class="mb-3">
+									<label class="form-label" for="password">Password*</label>
+									<input
+										class="form-control"
+										type="password"
+										name="password"
+										id="password"
+										required
+									/>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<p class="d-inline me-auto">* Required Field</p>
+							<button class="btn btn-success">Login</button>
+						</form>
+							</div>
+						</div>
+					</div>
 				</div>
-				<% } else { %>
+				
+				<!-- Button trigger modal -->
+				<div class="me-2">
+<a type="button" class="btn btn-dark btn-md" data-bs-toggle="modal" data-bs-target="#registerModal">
+	Sign Up
+</a>
+</div>
+  <!-- Modal -->
+  <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">Create Your Account</h5>
+		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<div class="modal-body">
+			<form action="/register" method="POST" class="needs-validation" novalidate>
+				<div class="mb-3">
+					<label class="form-label" for="username">Username*</label>
+					<input
+						class="form-control"
+						type="text"
+						name="username"
+						id="username"
+						required
+					/>
+					<div class="valid-feedback">Looks good!</div>
+				</div>
+				<div class="mb-3">
+					<label class="form-label" for="email">Email*</label>
+					<input
+						class="form-control"
+						type="email"
+						name="email"
+						id="email"
+						required
+					/>
+					<div class="valid-feedback">Looks good!</div>
+				</div>
+				<div class="mb-3">
+					<label class="form-label" for="password">Password*</label>
+					<input
+						class="form-control"
+						type="password"
+						name="password"
+						id="password"
+						required
+					/>
+					<div class="valid-feedback">Looks good!</div>
+				</div>
+				
+		</div>
+		<div class="modal-footer">
+			<p class="d-inline me-auto">* Required Field</p>
+		  <button class="btn btn-success">Create Your Account</button>
+			</form>
+		</div>
+	  </div>
+	</div>
+  </div>
+				<%} else { %>
 				<a class="nav-link" href="/logout">Logout</a>
 				<% } %>
 			</div>
 		</div>
 	</nav>
-</section>
-<section>
-	<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom mb-3">
-		<div class="container-fluid justify-content-end">
+</header>
+	<nav class="navbar navbar-expand-md navbar-light bg-light border-bottom mb-3">
+		<div class="container-md justify-content-end">
 			<button
 				class="navbar-toggler"
 				type="button"
@@ -38,7 +150,7 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 				<div class="navbar-nav">
-					<div class="me-2 border-end pe-2">
+					<div class="me-2 border-end border-start px-2">
 						<a class="nav-link" href="/order/menu">Menu</a>
 					</div>
 					<div class="navbar-nav">
@@ -50,4 +162,4 @@
 			</div>
 		</div>
 	</nav>
-</section>
+

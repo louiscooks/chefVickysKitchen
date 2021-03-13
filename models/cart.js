@@ -14,7 +14,8 @@ const cartSchema = new Schema({
 	],
 	totalQty: { type: Number, max: 5, default: 0 },
 	createdAt: { type: Date, default: Date.now },
-	deliverDate: { type: Date }
+	deliverDate: { type: Date },
+	totalPrice: { type: Number, min: 0, default: 0 }
 });
 const Cart = mongoose.model("Cart", cartSchema);
 module.exports = Cart;
