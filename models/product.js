@@ -6,11 +6,7 @@ const productSchema = new Schema({
 	name: String,
 	image: String,
 	price: Number,
-	category: {
-		type: String,
-		lowercase: true,
-		enum: ["seafood", "vegan", "other meats"]
-	},
+	combo: String,
 	ingredients: String
 });
 

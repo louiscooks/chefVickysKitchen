@@ -5,13 +5,9 @@ const authenticateUser = function (req, res, next) {
 		if (err) {
 			return next(err);
 		}
-		if (!user && !user.isAdmin) {
-			req.flash("error", "Incorrect username or password.");
-			return res.redirect("/admin/login");
-		}
 		if (!user) {
 			req.flash("error", "Incorrect username or password.");
-			return res.redirect("/login");
+			return res.redirect("/order/menu");
 		}
 		req.logIn(user, function (err) {
 			if (err) {

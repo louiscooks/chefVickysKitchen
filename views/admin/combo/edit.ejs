@@ -1,0 +1,64 @@
+<% layout('layouts/admintemplate') %>
+<div class="col-6 offset-3">
+	<div class="card">
+		<div class="card-body">
+			<h2>Create Combo</h2>
+			<form action="/combo/<%= combo._id %>/edit?_method=PATCH" method="POST">
+				<label for="comboname">Combo Name</label>
+				<div class="input-group mb-3">
+					<input
+						placeholder="<%= combo.name %>"
+						name="combo[name]"
+						id="comboname"
+						type="text"
+						class="form-control"
+						aria-label="Combo name"
+					/>
+				</div>
+				<div class="dropdown mb-3">
+					<button
+						class="btn btn-secondary dropdown-toggle"
+						id="dLabel"
+						type="button"
+						data-bs-toggle="dropdown"
+						aria-expanded="false"
+					>
+						Add Combo Products
+					</button>
+					<div class="dropdown-menu mt-2 px-3">
+						<% for(product of products) {%>
+						<div class="form-check">
+							<input <% combo.products.forEach((comboProduct)=>{ %> <%=
+							product.name === comboProduct.name ? 'checked' : '' %> <% }) %>
+							name="combo[products]" class="form-check-input" type="checkbox"
+							value="<%= product._id %>" id="flexCheckDefault" />
+							<label class="form-check-label" for="flexCheckDefault">
+								<%= product.name %>
+							</label>
+						</div>
+						<% } %>
+					</div>
+				</div>
+				<label for="comboNum">Combo Price</label>
+				<div class="input-group mb-3">
+					<span class="input-group-text">$</span>
+					<input
+						placeholder="<%= combo.price %>"
+						id="Combonum"
+						name="combo[price]"
+						type="number"
+						class="form-control"
+						aria-label="Amount (to the nearest dollar)"
+					/>
+					<span class="input-group-text">.00</span>
+				</div>
+				<div class="text-center">
+					<a class="btn btn-danger" href="/combo/<%= combo._id %>/view"
+						>Cancel</a
+					>
+					<button class="btn btn-success">Update Combo</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

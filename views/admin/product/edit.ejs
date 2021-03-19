@@ -1,0 +1,35 @@
+<% layout('layouts/admintemplate') %>
+    <div class="row">
+        <h1 class="text-center">Edit Product</h1>
+        <div class="col-6 offset-3">
+            <form action="/product/<%= product._id %>/edit?_method=PUT" method="POST" novalidate class="needs-validation">
+                <div class="mb-3">
+                    <label class="form-label" for="name">Product Name</label>
+                    <input class="form-control" type="text" value="<%= product.name %>" name="product[name]"
+                        id="name" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="price">Price</label>
+                    <input class="form-control" type="number" value="<%= product.price%>" name="product[price]"
+                        id="price" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="image">Image Url</label>
+                    <input class="form-control" type="text" value="<%= product.image%>" name="product[image]"
+                        id="image" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="ingredients">Product Ingredients</label>
+                    <textarea class="form-control" type="text" name="product[ingredients]" id="ingredients"
+                        required><%= product.ingredients %></textarea>
+                </div>
+                <div class="col-6">
+                <div class="row mb-3">
+                    <div class="col"> <button class="btn btn-info">Update product</button></div>
+                    <div class="col"> <a  class="btn btn-danger" href="/product/<%= prodduct_id %>/view">Cancel</a></div>
+                </div>
+            </div>
+        </div>
+        
+        </form>
+       

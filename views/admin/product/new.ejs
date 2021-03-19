@@ -1,0 +1,154 @@
+<% layout('layouts/admintemplate') %>
+<div class="container">
+	<p class="text-center">
+		<a
+			class="btn btn-primary"
+			data-bs-toggle="collapse"
+			href="#productFormCollapse"
+			role="button"
+			aria-expanded="false"
+			aria-controls="productFormCollapse"
+			>Toggle Product Form</a
+		>
+		<button
+			class="btn btn-primary"
+			type="button"
+			data-bs-toggle="collapse"
+			data-bs-target="#comboFormCollapse"
+			aria-expanded="false"
+			aria-controls="comboFormCollapse"
+		>
+			Toggle Combo Form
+		</button>
+		<button
+			class="btn btn-primary"
+			type="button"
+			data-bs-toggle="collapse"
+			data-bs-target=".multi-collapse"
+			aria-expanded="false"
+			aria-controls="productFormCollapse comboFormCollapse"
+		>
+			Toggle Both Forms
+		</button>
+	</p>
+	<div class="row">
+		<div class="col-6">
+			<div class="collapse multi-collapse show" id="productFormCollapse">
+				<div class="card card-body">
+					<h1>Create Products</h1>
+					<form action="/product/add" method="POST">
+						<label for="name">Product Name</label>
+						<div class="input-group mb-3">
+							<input
+								name="product[name]"
+								id="name"
+								type="text"
+								class="form-control"
+								placeholder="Enter name"
+								aria-label="Product name"
+							/>
+						</div>
+						<label for="num">Unit Price</label>
+						<div class="input-group mb-3">
+							<span class="input-group-text">$</span>
+							<input
+								id="num"
+								name="product[price]"
+								type="number"
+								class="form-control"
+								aria-label="Amount (to the nearest dollar)"
+							/>
+							<span class="input-group-text">.00</span>
+						</div>
+
+						<label for="basic-url" class="form-label">Image URL</label>
+						<div class="input-group mb-3">
+							<input
+								name="product[image]"
+								type="text"
+								class="form-control"
+								id="basic-url"
+								placeholder="https://example.com/imageUrl"
+								aria-describedby="basic-addon3"
+							/>
+						</div>
+						<div class="input-group mb-3">
+							<span class="input-group-text">Product Ingredients</span>
+							<textarea
+								name="product[ingredients]"
+								class="form-control"
+								aria-label="With textarea"
+								placeholder="Product description"
+							></textarea>
+						</div>
+						<div class="text-center">
+							<button class="btn btn-success">Create Product</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-6">
+			<div class="collapse multi-collapse show" id="comboFormCollapse">
+				<div class="card card-body">
+					<h2>Create Combo</h2>
+					<form action="/combo/add" method="POST">
+						<label for="comboname">Combo Name</label>
+						<div class="input-group mb-3">
+							<input
+								name="combo[name]"
+								id="comboname"
+								type="text"
+								class="form-control"
+								placeholder="Enter name"
+								aria-label="Product name"
+							/>
+						</div>
+						<div class="dropdown mb-3">
+							<button
+								class="btn btn-secondary dropdown-toggle"
+								id="dLabel"
+								type="button"
+								data-bs-toggle="dropdown"
+								aria-expanded="false"
+							>
+								Add Combo Products
+							</button>
+							<div class="dropdown-menu mt-2 px-3">
+								<% for(product of products) {%>
+								<div class="form-check">
+									<input
+										name="combo[products]"
+										class="form-check-input"
+										type="checkbox"
+										value="<%= product._id %>"
+										id="flexCheckDefault"
+									/>
+									<label class="form-check-label" for="flexCheckDefault">
+										<%= product.name %>
+									</label>
+								</div>
+								<% } %>
+							</div>
+						</div>
+						<label for="comboNum">Combo Price</label>
+						<div class="input-group mb-3">
+							<span class="input-group-text">$</span>
+							<input
+								id="Combonum"
+								name="combo[price]"
+								type="number"
+								class="form-control"
+								aria-label="Amount (to the nearest dollar)"
+							/>
+							<span class="input-group-text">.00</span>
+						</div>
+						<div class="text-center">
+							<button class="btn btn-success">Create Combo</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -2,21 +2,11 @@ const dateFormat = require("../date/DateFormat");
 const Cart = require("../models/cart");
 const Product = require("../models/product");
 
-const categories = ["Seafood", "Vegan", "Other Meats"];
-
 module.exports.showMenu = async (req, res) => {
-	const { category } = req.query;
-	if (category) {
-		const products = await Product.find({ category });
-		res.render("orders/index", { products, categories, category });
-	} else {
-		const products = await Product.find();
-		res.render("orders/index", {
-			products,
-			categories,
-			category: "All Options"
-		});
-	}
+	const products = await Product.find();
+	res.render("orders/index", {
+		products
+	});
 };
 module.exports.showCart = async (req, res) => {
 	const yourCart = req.session.cart;
@@ -33,7 +23,7 @@ module.exports.showCart = async (req, res) => {
 };
 module.exports.addToCart = async (req, res) => {
 	const { id } = req.params;
-	const item = req.body;
+	const item = req.body.cart;
 	const product = await Product.findById(id);
 	const storedCart = await Cart.findById(req.session.cart);
 	console.log("found storedcart", storedCart);
@@ -41,7 +31,7 @@ module.exports.addToCart = async (req, res) => {
 	storedCart.items.forEach(async (element) => {
 		if (
 			product._id.toString() === element.product.toString() &&
-			req.body.specialInstructions === element.specialInstructions
+			req.body.cart.specialInstructions === element.specialInstructions
 		) {
 			// increment the quantity
 			element.qty++;

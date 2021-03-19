@@ -10,8 +10,8 @@ router.post("/login", authenticateUser, user.login);
 router.post("/register", checkForCart, catchAsync(user.register));
 router.get("/logout", user.logout);
 router.get("/admin/login", user.renderAdminLogin);
-router.get("/admin/register", checkForAdmin, user.renderAdminRegister);
-router.post("/admin/register", checkForAdmin, catchAsync(user.registerAdmin));
+router.get("/admin/register", user.renderAdminRegister);
+router.post("/admin/register", checkForCart, catchAsync(user.registerAdmin));
 router.get("/admin/logout", user.logoutAdmin);
 
 module.exports = router;

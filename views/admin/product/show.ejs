@@ -1,0 +1,26 @@
+<% layout('layouts/admintemplate') %>
+<div class="col-6 offset-3">
+	<div class="mb-3">
+		<a href="/product/">Back to Products</a>
+	</div>
+	<div class="card mb-3">
+		<img src="<%= product.image %>" class="card-img-top" alt="..." />
+		<div class="card-body">
+			<h5 class="card-title"><%= product.name %></h5>
+			<p class="card-text">
+				<%= product.ingredients %><br /><span class="text-dark fw-bold"
+					>Unit price:</span
+				>
+				$<%= product.price %>
+			</p>
+			<a href="/product/<%= product.id %>/edit" class="btn btn-primary">Edit</a>
+			<form
+				class="d-inline mt-2"
+				action="/product/<%= product._id %>?_method=DELETE"
+				method="POST"
+			>
+				<button class="btn btn-danger">Delete</button>
+			</form>
+		</div>
+	</div>
+</div>

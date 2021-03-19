@@ -2,19 +2,8 @@
 <body>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-2">
+			<div class="col-6 offset-3">
 				<h1>Menu</h1>
-				<div class="list-group">
-					<a class="btn btn-dark mb-2" href="/order/menu">All Options</a>
-					<% for(let cat of categories){ %>
-					<a class="btn btn-dark mb-2" href="/order/menu?category=<%= cat %>"
-						><%= cat%></a
-					>
-					<%} %>
-				</div>
-			</div>
-			<div class="col-6 offset-1">
-				<h3 class="mt-2 mb-3"><%= category%></h3>
 				<% for(let product of products){ %>
 				<div class="row">
 					<div class="card mb-3 pt-3">
@@ -22,14 +11,11 @@
 						<div class="card-body">
 							<form action="/order/add/<%=product._id%>" method="POST">
 								<h5 class="card-title"><%=product.name %></h5>
-								<h6 class="card-subtitle mb-2 text-muted">
-									<%=product.category %>
-								</h6>
-								<p class="card-text"><%= product.ingredients%></p>
+								<p class="card-text text-muted"><%= product.ingredients%></p>
 								<% if(userCart){ %>
 								<div>
 									<label class="form-label" for="qty">qty:</label>
-									<select name="qty" id="qty">
+									<select name="cart[qty]" id="qty">
 										<%for(let i = 1; i<= 5; i++){ %>
 										<option value="<%= i %>"><%= i %></option>
 										<%} %>
@@ -39,7 +25,7 @@
 									<label for="instruction"></label>
 									<textarea
 										class="form-control mb-3"
-										name="specialInstructions"
+										name="cart[specialInstructions]"
 										id="instruction"
 										cols="40"
 										rows="3"

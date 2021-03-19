@@ -13,7 +13,8 @@ const mongoose = require("mongoose");
 const User = require("./models/user");
 
 const orderRoutes = require("./routes/order");
-const adminProductRoutes = require("./routes/adminProduct");
+const productRoutes = require("./routes/product");
+const comboRoutes = require("./routes/combo");
 const userRoutes = require("./routes/user");
 
 mongoose.connect("mongodb://localhost:27017/chefvicky", {
@@ -69,8 +70,10 @@ app.get("/", (req, res) => {
 
 // view all menus send post req to cart
 app.use("/order", orderRoutes);
-//review routes
-app.use("/admin", adminProductRoutes);
+//product routes
+app.use("/product", productRoutes);
+//combo routes
+app.use("/combo", comboRoutes);
 //user routes
 app.use("/", userRoutes);
 

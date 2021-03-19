@@ -5,6 +5,7 @@ const cartSchema = new Schema({
 	items: [
 		new Schema(
 			{
+				combo: { type: Schema.Types.ObjectId, ref: "Combo" },
 				product: { type: Schema.Types.ObjectId, ref: "Product" },
 				qty: Number,
 				specialInstructions: String
