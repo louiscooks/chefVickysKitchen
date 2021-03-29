@@ -82,11 +82,11 @@ module.exports.updateCombo = async (req, res) => {
 	}
 	await combo.save();
 	req.flash("success", "Combo successfully updated.");
-	res.redirect("/product/view");
+	res.redirect("/product");
 };
 module.exports.deleteCombo = async (req, res) => {
 	const { id } = req.params;
 	const combo = await Combo.findByIdAndDelete(id);
 	console.log("deleted combo", combo);
-	res.redirect("/product/view");
+	res.redirect("/product");
 };

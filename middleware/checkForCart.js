@@ -24,7 +24,6 @@ const checkForCart = async function (req, res, next) {
 				if (err) {
 					console.log(err);
 				}
-				await cart.save();
 				console.log("user cart saved to session new cart", cart);
 			});
 			return next();

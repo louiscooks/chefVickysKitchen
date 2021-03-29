@@ -1,0 +1,202 @@
+<% layout('layouts/orderTemplate') %>
+<div class="container-md">
+	<h2><%= currentUser ? 'Welcome Back': 'Tell us about yourself' %></h2>
+	<form action="/cart/checkout/<%= yourCart %>?_method=PUT" method="POST">
+		<div class="row">
+			<div class="col">
+				<div class="row g-3">
+					<div class="col-md-6">
+						<label for="firstnameCheckout" class="form-label">Firstname</label>
+						<input
+                        name="user[firstname]"
+							type="text"
+							class="form-control"
+							placeholder="<%= currentUser ? currentUser.firstname : '' %>"
+							id="firstnameCheckout"
+						/>
+					</div>
+					<div class="col-md-6">
+						<label for="lastnameCheckout" class="form-label">Lastname</label>
+						<input
+                        name="user[lastname]"
+							type="text"
+							class="form-control"
+							placeholder="<%= currentUser ? currentUser.lastname : '' %>"
+							id="lastnameCheckout"
+						/>
+					</div>
+					<div class="col-md-6">
+						<label for="emailCheckout" class="form-label">Email</label>
+						<input
+                        name="user[email]"
+							type="email"
+							class="form-control"
+							placeholder="<%= currentUser ? currentUser.email : '' %>"
+							id="emailCheckout"
+						/>
+					</div>
+					<div class="col-md-6">
+						<label for="numberCheckout" class="form-label">Phone Number</label>
+						<input
+                        name="user[phoneNumber]"
+							type="number"
+							class="form-control"
+							placeholder="<%= currentUser ? currentUser.phoneNumber : '' %>"
+							id="numberCheckout"
+						/>
+					</div>
+				</div>
+				<% if(!currentUser){ %>
+				<div>
+					<p class="mb-0">
+						Aleady have an Account?
+						<a href="" data-bs-toggle="modal" data-bs-target="#loginModal"
+							>Login</a
+						>
+					</p>
+					<p>
+						Need an Account?
+						<a href="" data-bs-toggle="modal" data-bs-target="#registerModal"
+							>Sign Up</a
+						>
+					</p>
+				</div>
+				<% } %>
+				<p class="mt-3">Recieve our communication via</p>
+				<div class="form-check mb-3">
+					<input
+                    name="user[preferredContact]"
+						class="form-check-input"
+						type="checkbox"
+						value="email"
+						id="emailCheck"
+					/>
+					<label class="form-check-label" for="emailCheck"> Email </label>
+				</div>
+				<div class="form-check">
+					<input
+                    name="user[preferredContact]"
+						class="form-check-input"
+						type="checkbox"
+						value="sms"
+						id="smsCheck"
+					/>
+					<label class="form-check-label" for="smsCheck"> SMS/Text </label>
+				</div>
+			</div>
+			<div class="col">
+				<% if(cart.items.length === 0){ %>
+				<div class="card">
+					<div class="card-body d-flex justify-content-end">
+						<p class="card-text me-auto">There are no items in your cart.</p>
+						<a class="btn btn-danger btn-md" href="/order/menu?product=true"
+							>View Menu</a
+						>
+					</div>
+				</div>
+				<% } %> <%for(let item of cart.items){ %>
+				<div class="card mb-3" style="max-width: 540px">
+					<div class="row g-0">
+						<div class="col-md-8">
+							<div class="card-body">
+								<% if(item.product) {%>
+								<h5 class="card-title"><%= item.product.name %> </h5>
+								<p class="card-text"><span class="text-muted"><%= item.diet %></span> <br><%= item.product.ingredients %></p>
+								<div class="mb-3">
+									<label for="qty">qty:</label>
+									<select name="<%=item._id%>[qty]" id="qty">
+										<%for(let i = 1; i<= 5; i++){ %> <option value="<%= i %>"
+										<%= item.qty === i ? 'selected' : '' %>><%= i %> <%} %>
+									</select>
+								</div>
+								<a class="remove" href="#">remove</a>
+								<div>
+									<label for="speciali">Any modifications?</label>
+									<textarea
+										class="form-control"
+										name="<%=item._id%>[specialInstructions]"
+										id="speciali"
+										cols="50"
+										rows="2"
+									>
+        <%= item.specialInstructions %></textarea
+									>
+								</div>
+								<% } %> <% if(item.combo) {%>
+								<h5 class="card-title"><%= item.combo.name %> </h5>
+                                <p class="card-text text-muted"><%= item.diet %></p>
+								<ul>
+									<% for(let prod of item.combo.products){ %>
+									<li><%= prod.name %></li>
+									<% } %>
+								</ul>
+								<div class="mb-3">
+									<label for="qty">qty:</label>
+									<select name="<%=item._id%>[qty]" id="qty">
+										<%for(let i = 1; i<= 5; i++){ %> <option value="<%= i %>"
+										<%= item.qty === i ? 'selected' : '' %>><%= i %> <%} %>
+									</select>
+								</div>
+								<a class="remove" href="#">remove</a>
+								<div>
+									<label for="textareaspecial">Any Modifications?</label>
+									<textarea
+										class="form-control"
+										name="<%=item._id%>[specialInstructions]"
+										id="textareaspecial"
+										cols="50"
+										rows="2"
+									>
+        <%= item.specialInstructions %></textarea
+									>
+								</div>
+								<% } %>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<% } %>
+
+				<div class="card mb-3">
+					<div class="row g-0">
+						<div class="col-md-8">
+							<div class="card-body">
+								<p class="card-text text-muted mb-0">
+									*Save changes made to cart before checking out*
+								</p>
+								<h5 class="card-title">YOUR CART</h5>
+								<ul
+									style="list-style-type: none; margin: 0; padding: 0"
+									class="mb-3"
+								>
+									<%for (let item of cart.items) {%>
+									<li>
+										<%= item.product ? item.product.name: item.combo.name %>
+										x<%= item.qty %>
+									</li>
+									<% } %>
+								</ul>
+								<button
+									type="submit"
+									class="btn btn-md btn-primary"
+									name="action"
+									value="update_button"
+								>
+									Save Changes
+								</button>
+								<button
+									type="submit"
+									class="btn btn-md btn-success"
+									name="action"
+									value="checkout_button"
+									<%=cart.items.length ? '' : 'disabled' %>> Checkout
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

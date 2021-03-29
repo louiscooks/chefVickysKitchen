@@ -42,10 +42,10 @@ module.exports.editProduct = async (req, res) => {
 		{ ...req.body.product },
 		{ new: true }
 	);
-	res.redirect("/product/");
+	res.redirect("/product");
 };
 module.exports.deleteProduct = async (req, res) => {
 	const { id } = req.params;
 	const product = await Product.findByIdAndDelete(id);
-	res.redirect("/product/");
+	res.redirect("/product");
 };

@@ -4,7 +4,7 @@ const catchAsync = require("../utilities/catchAsync");
 const checkForAdmin = require("../middleware/checkForAdmin");
 const product = require("../controllers/product");
 
-router.get("/", catchAsync(product.renderProducts));
+router.get("", catchAsync(product.renderProducts));
 router.get("/add", product.addProductForm);
 router.post("/add", checkForAdmin, catchAsync(product.addProduct));
 router.get("/:id/view", catchAsync(product.showProduct));

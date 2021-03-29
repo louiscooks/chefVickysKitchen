@@ -4,7 +4,11 @@
 			<a class="navbar-brand" href="/">Chef Vicky's Kitchen</a>
 			<div class="navbar-nav d-flex flex-md-row flex-sm-wrap">
 				<div class="me-3">
-				<a class="nav-link text-white fw-bold" href="#">START YOUR ORDER</a>
+				<% if(!startOrder) {%> 
+				<a class="nav-link text-white fw-bold" href="/order">START YOUR ORDER</a>
+				<% } else{%> 
+				<a class="nav-link text-white" href="/order/end">Cancel Order</a>
+<% } %> 
 			</div>
 				<% if(!currentUser) { %>
 				<!-- Button trigger modal -->
@@ -85,7 +89,16 @@
 		</div>
 		<div class="modal-body">
 			<form action="/register" method="POST" class="needs-validation" novalidate>
-				<div class="mb-3">
+				<div class="row g-3">
+					<div class="col-md-6">
+						<label class="form-label" for="firstname">Firstname*</label>
+					  <input type="text" class="form-control" id="firstname" placeholder="First name" aria-label="First name">
+					</div>
+					<div class="col-md-6">
+						<label class="form-label" for="lastname">Lastname*</label>
+					  <input type="text" class="form-control" id="lastname" placeholder="Last name" aria-label="Last name">
+					</div>
+				<div class="col-12">
 					<label class="form-label" for="username">Username*</label>
 					<input
 						class="form-control"
@@ -96,18 +109,7 @@
 					/>
 					<div class="valid-feedback">Looks good!</div>
 				</div>
-				<div class="mb-3">
-					<label class="form-label" for="email">Email*</label>
-					<input
-						class="form-control"
-						type="email"
-						name="email"
-						id="email"
-						required
-					/>
-					<div class="valid-feedback">Looks good!</div>
-				</div>
-				<div class="mb-3">
+				<div class="col-12">
 					<label class="form-label" for="password">Password*</label>
 					<input
 						class="form-control"
@@ -118,11 +120,35 @@
 					/>
 					<div class="valid-feedback">Looks good!</div>
 				</div>
+				<div class="col-12">
+					<label class="form-label" for="email">Email*</label>
+					<input
+						class="form-control"
+						type="email"
+						name="email"
+						id="email"
+						required
+					/>
+					<div class="valid-feedback">Looks good!</div>
+				</div>
+				<div class="col-12">
+					<label class="form-label" for="number">Phone Number*</label>
+					<input
+						class="form-control"
+						type="number"
+						name="phoneNumber"
+						id="number"
+						required
+					/>
+					<div class="valid-feedback">Looks good!</div>
+				</div>
+				
 				
 		</div>
 		<div class="modal-footer">
 			<p class="d-inline me-auto">* Required Field</p>
 		  <button class="btn btn-success">Create Your Account</button>
+		</div>
 			</form>
 		</div>
 	  </div>
@@ -135,6 +161,7 @@
 		</div>
 	</nav>
 </header>
+<% if(!startOrder){ %> 
 	<nav class="navbar navbar-expand-md navbar-light bg-light border-bottom mb-3">
 		<div class="container-md justify-content-end">
 			<button
@@ -151,15 +178,15 @@
 			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 				<div class="navbar-nav">
 					<div class="me-2 border-end border-start px-2">
-						<a class="nav-link" href="/order/menu">Menu</a>
+						<a class="nav-link" href="/cart/menu">Menu</a>
 					</div>
 					<div class="navbar-nav">
 						<div class="me-2 border-end pe-2">
-							<a class="nav-link" href="/order/view-cart">View Cart</a>
+							<a class="nav-link" href="/cart/view">View Cart</a>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</nav>
-
+<% } %> 

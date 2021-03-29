@@ -8,15 +8,29 @@ const cartSchema = new Schema({
 				combo: { type: Schema.Types.ObjectId, ref: "Combo" },
 				product: { type: Schema.Types.ObjectId, ref: "Product" },
 				qty: Number,
-				specialInstructions: String
+				specialInstructions: String,
+				diet: String
 			},
 			{ _id: true }
 		)
 	],
-	totalQty: { type: Number, max: 5, default: 0 },
-	createdAt: { type: Date, default: Date.now },
-	deliverDate: { type: Date },
-	totalPrice: { type: Number, min: 0, default: 0 }
+	deliveryDate: { type: Date },
+	location: {
+		street: String,
+		unit: String,
+		city: String,
+		state: String,
+		zipcode: String
+	},
+	geometry: {
+		type: {
+			type: String,
+			enum: ["Point"]
+		},
+		coordinates: {
+			type: [Number]
+		}
+	}
 });
 const Cart = mongoose.model("Cart", cartSchema);
 module.exports = Cart;

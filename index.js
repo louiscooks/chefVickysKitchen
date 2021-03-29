@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== "production") {
+	require("dotenv").config();
+}
+
 const express = require("express");
 const path = require("path");
 const ejsMate = require("ejs-mate");
@@ -12,6 +16,7 @@ const mongoose = require("mongoose");
 
 const User = require("./models/user");
 
+const cartRoutes = require("./routes/cart");
 const orderRoutes = require("./routes/order");
 const productRoutes = require("./routes/product");
 const comboRoutes = require("./routes/combo");
@@ -61,6 +66,8 @@ app.use((req, res, next) => {
 	res.locals.error = req.flash("error");
 	res.locals.currentUser = req.user;
 	res.locals.userCart = req.session.cart;
+	res.locals.startOrder = req.session.startOrder;
+	res.locals.url = req.originalUrl;
 	next();
 });
 //home page
@@ -68,6 +75,8 @@ app.get("/", (req, res) => {
 	res.render("home");
 });
 
+// view all menus send post req to cart
+app.use("/cart", cartRoutes);
 // view all menus send post req to cart
 app.use("/order", orderRoutes);
 //product routes

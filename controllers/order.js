@@ -1,102 +1,98 @@
-const dateFormat = require("../date/DateFormat");
-const Cart = require("../models/cart");
+const Combo = require("../models/combo");
 const Product = require("../models/product");
+const dateFormat = require("../date/DateFormat");
+const cart = require("./cart");
+const Cart = require("../models/cart");
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const mapboxToken = process.env.MAPBOX_TOKEN;
+const geocoder = mbxGeocoding({ accessToken: mapboxToken });
 
-module.exports.showMenu = async (req, res) => {
+module.exports.renderOrder = function (req, res) {
+	res.render("order/new/order");
+};
+module.exports.verifyAddress = async function (req, res) {
+	console.log("this is req.session.cart in verify route", req.session.cart);
+	console.log("this is req.body.address", req.body.address);
+	const geoData = await geocoder
+		.forwardGeocode({
+			query: `${req.body.address.street}, ${req.body.address.zipcode}`,
+			limit: 1
+		})
+		.send();
+	const cart = await Cart.findById(req.session.cart);
+	cart.location = req.body.address;
+	cart.geometry = geoData.body.features[0].geometry;
+	await cart.save();
+	console.log("this is the cart", cart);
+	res.redirect("/order/date");
+};
+module.exports.renderMenu = async function (req, res) {
+	const query = req.query.product;
+	const combo = await Combo.findById(req.session.combo).populate("products");
 	const products = await Product.find();
-	res.render("orders/index", {
-		products
+	res.render("order/new/menu", {
+		combo,
+		query
 	});
 };
-module.exports.showCart = async (req, res) => {
-	const yourCart = req.session.cart;
-	const cart = await Cart.findById(req.session.cart).populate({
-		path: "items",
-		populate: {
-			path: "product"
-		}
-	});
-	res.render("orders/show", {
+module.exports.renderDate = async function (req, res) {
+	const combos = await Combo.find();
+	//creating the mindate to restrict date input
+	const date = new Date(Date.now());
+	console.log("this is date", date);
+	let month = date.getMonth() + 1;
+	let day = date.getDate() + 2;
+	let year = date.getFullYear();
+	if (month < 10) month = "0" + month.toString();
+	if (day < 10) day = "0" + day.toString();
+
+	let minDate = year + "-" + month + "-" + day;
+	res.render("order/new/date", {
 		cart,
-		yourCart
+		combos,
+		minDate
 	});
 };
-module.exports.addToCart = async (req, res) => {
-	const { id } = req.params;
-	const item = req.body.cart;
-	const product = await Product.findById(id);
-	const storedCart = await Cart.findById(req.session.cart);
-	console.log("found storedcart", storedCart);
-	itemFound = false;
-	storedCart.items.forEach(async (element) => {
-		if (
-			product._id.toString() === element.product.toString() &&
-			req.body.cart.specialInstructions === element.specialInstructions
-		) {
-			// increment the quantity
-			element.qty++;
-			itemFound = true;
-			await storedCart.save();
-			return;
-		} else if (product._id.toString() === element.product.toString()) {
-			//add another product
-			storedCart.items.push({
-				product: product._id,
-				qty: item.qty,
-				specialInstructions: item.specialInstructions
-			});
-			itemFound = true;
-			await storedCart.save();
-			return;
-		}
-	});
-	if (!itemFound) {
-		//push product in cart
-		storedCart.items.push({
-			product: product._id,
-			qty: item.qty,
-			specialInstructions: item.specialInstructions
-		});
-		await storedCart.save();
-		console.log("pushing item in stored cart", storedCart);
+module.exports.addDateFindCombo = async function (req, res) {
+	const date = new Date(req.body.deliveryDate);
+	const deliveryDate = req.body.deliveryDate;
+	const days = [
+		"Sunday",
+		"Monday",
+		"Tuesday",
+		"Wednesday",
+		"Thursday",
+		"Friday",
+		"Saturday"
+	];
+	if (date.getDay() + 1 === 7 || date.getDay() + 1 === 6) {
+		console.log("day is set to weekend");
+		req.flash("error", "This day is unavailable for delivery");
+		return res.redirect("/order/date");
 	}
-	res.redirect("/order/menu");
-};
-module.exports.finalizeCart = async (req, res) => {
-	const { id } = req.params;
-	const action = req.body.action;
-	const storedCart = await Cart.findById(id);
-	if (action === "checkout_button") {
-		storedCart.items.forEach((element) => {
-			let i = req.body[element._id];
-			element.qty = i.qty;
-			element.specialInstructions = i.specialInstructions;
-			storedCart.deliveryDate = req.body.deliveryDate;
-		});
-		await storedCart.save();
-		console.log("checking for updated price and qty", storedCart);
-		res.send("checkout");
-	} else if (action === "update_button") {
-		console.log("storedCart before changes saved", storedCart);
-		storedCart.items.forEach(async (element) => {
-			let i = req.body[element._id];
-			if (!i) {
-				await Cart.findByIdAndUpdate(
-					id,
-					{
-						$pull: { items: { _id: element._id } },
-						$inc: { totalQty: element.qty }
-					},
-					{ new: true }
-				);
-			} else {
-				element.qty = i.qty;
-				element.specialInstructions = i.specialInstructions;
-				storedCart.deliveryDate = req.body.deliveryDate;
+	let name = days[date.getDay() + 1];
+	console.log("this is session cart", req.session.cart);
+	const cart = await Cart.findByIdAndUpdate(
+		req.session.cart,
+		{ deliveryDate },
+		{ new: true }
+	);
+	const combo = await Combo.findOne({ name });
+	console.log("this is cart updated", cart);
+	console.log("this is combo", combo);
+	if (combo) {
+		console.log("combo saved to session triggered");
+		req.session.combo = combo._id;
+		req.session.save(function (err) {
+			if (err) {
+				console.log(err);
 			}
+			console.log("this is req.session.userCombo", req.session.userCombo);
 		});
-		await storedCart.save();
-		console.log("cart saved", storedCart);
-		res.redirect("/order/view-cart");
+		return res.redirect("/order/menu");
 	}
+};
+module.exports.renderCheckout = cart.showCart;
+module.exports.endOrder = (req, res) => {
+	res.redirect("/cart/menu");
 };

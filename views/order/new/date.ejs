@@ -1,0 +1,15 @@
+<% layout('layouts/orderTemplate') %>
+<div class="col-6 offset-3">
+	<h1>Select delivery day</h1>
+	<div class="card mb-3">
+		<div class="card-body">
+			<h5 class="card-title">Select order date</h5>
+			<form action="/order/add/date" method="POST">
+				<input type="date" name="deliveryDate" min="<%= minDate %>" />
+				<div class="d-flex flex-row justify-content-end mt-3">
+					<button class="btn btn-success btn-md">Continue</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
