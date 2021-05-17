@@ -1,14 +1,14 @@
 <% layout('layouts/admintemplate') %>
-<div class="container">
-	<div class="row offset-1">
-		<div class="col-5">
-			<% for(let product of products){ %>
-			<div class="card mb-3">
+<div class="col">
+	<div class="row g-3">
+		<% for(let product of products){ %>
+		<div class="col-sm-12 col-md-3">
+			<div class="card mb-3 border-0">
 				<img src="<%= product.image %>" class="card-img-top" alt="..." />
 				<div class="card-body">
 					<h5 class="card-title"><%= product.name %></h5>
 					<p class="card-text">
-						<%= product.ingredients %><br /><span class="text-dark fw-bold"
+						<%= product.ingredients%><br /><span class="text-dark fw-bold"
 							>Unit price:</span
 						>
 						$<%= product.price %>
@@ -18,25 +18,7 @@
 					>
 				</div>
 			</div>
-			<% } %>
 		</div>
-		<div class="col-5">
-			<% for(let combo of combos){ %>
-			<div class="card mb-3">
-				<div class="card-body">
-					<h5 class="card-title"><%= combo.name %></h5>
-					<p class="card-text">
-						<ul>
-							<% for(let comboProduct of combo.products) {%>
-								<li><%= comboProduct.name %></li>
-								<% } %>  
-						</ul>
-						<span class="fw-bold">Unit price:</span> $<%= combo.price %>
-					</p>
-					<a href="/combo/<%= combo.id %>/view" class="btn btn-primary">More Info</a>
-				</div>
-			</div>
-			<% } %>
-		</div>
+		<% } %>
 	</div>
 </div>

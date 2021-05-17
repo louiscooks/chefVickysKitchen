@@ -1,0 +1,36 @@
+<% layout('layouts/boilerplate') %>
+<h1>View Order History</h1>
+<% if(currentUser){ %>
+<table class="table table-responsive-md">
+	<thead>
+		<tr>
+			<th scope="col">Order ID</th>
+			<th scope="col">Firstname</th>
+			<th scope="col">Lastname</th>
+			<th scope="col">Date placed</th>
+			<th scope="col">status</th>
+			<th scope="col">View Details</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% for(let order of user.orders){%>
+		<tr>
+			<th scope="row"><%= order._id%></th>
+			<td><%=order.contact.firstname %></td>
+			<td><%=order.contact.lastname%></td>
+			<td>
+				<%= order.createdAt.format('dddd, mmmm d, yyyy') %> <%=
+				order.createdAt.toLocaleTimeString("en-US") %>
+			</td>
+			<td><%= order.status %></td>
+			<td>
+				<form action="/order/status/<%= order._id %>">
+					<button class="btn btn-info btn-sm">View Order</button>
+				</form>
+			</td>
+		</tr>
+		<% }%>
+	</tbody>
+</table>
+
+<% } %>

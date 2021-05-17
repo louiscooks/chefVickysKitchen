@@ -1,0 +1,91 @@
+<% layout('layouts/confirmationTemplate') %>
+<section class="card mb-3">
+	<div class="card-body">
+		<h5 class="card-title d-flex justify-content-center">
+			YOUR TOTAL IS&colon;
+		</h5>
+		<p class="m-0 fs-4 d-flex justify-content-center">
+			<%= priceFormatter(cart.totalPrice) %>
+		</p>
+	</div>
+</section>
+<h2><%= currentUser ? 'Welcome Back': 'Tell us about yourself' %></h2>
+<form
+	class="needs-validation"
+	action="/order/add/contact"
+	method="POST"
+	novalidate
+>
+	<div class="row">
+		<div class="col">
+			<div class="row g-3">
+				<div class="col-md-6">
+					<label for="firstnameCheckout" class="form-label">Firstname</label>
+					<input name="user[firstname]" required type="text"
+					class="form-control" placeholder="<%= cart.contact.firstname?
+					cart.contact.firstname: 'Firstname' %>" value="<%= currentUser ?
+					currentUser.firstname:''%>" <%= currentUser ? 'readonly' : '' %>
+					id="firstnameCheckout" />
+				</div>
+				<div class="col-md-6">
+					<label for="lastnameCheckout" class="form-label">Lastname</label>
+					<input name="user[lastname]" required type="text" class="form-control"
+					placeholder="<%= cart.contact.lastname? cart.contact.lastname:
+					'Lastname' %>" value="<%= currentUser ? currentUser.lastname :'' %>"
+					<%= currentUser ? 'readonly' : '' %> id="lastnameCheckout" />
+				</div>
+				<div class="col-md-6">
+					<label for="emailCheckout" class="form-label">Email</label>
+					<input name="user[email]" required type="email" class="form-control"
+					placeholder="<%=cart.contact.email? cart.contact.email:
+					'example123@domain.com' %>" value="<%= currentUser ? currentUser.email
+					:'' %>" <%= currentUser ? 'readonly' : '' %> id="emailCheckout" />
+				</div>
+				<div class="col-md-6">
+					<label for="numberCheckout" class="form-label">Phone Number</label>
+					<input name="user[phoneNumber]" type="text" class="form-control"
+					placeholder="+1(123)456-7890" value="<%= currentUser ?
+					currentUser.phoneNumber : cart.contact.phoneNumber?
+					cart.contact.phoneNumber: '' %>" <%= currentUser ? 'readonly' : '' %>
+					id="numberCheckout" />
+				</div>
+			</div>
+			<% if(!currentUser){ %>
+			<div>
+				<p class="mb-0">
+					Aleady have an Account?
+					<a href="" data-bs-toggle="modal" data-bs-target="#loginModal"
+						>Login</a
+					>
+				</p>
+				<p>
+					Need an Account?
+					<a href="/register">Sign Up</a>
+				</p>
+			</div>
+			<% } %>
+			<p class="mt-3">Recieve our communication via</p>
+			<div class="form-check mb-3">
+				<input
+					name="user[preferredContact]"
+					class="form-check-input"
+					type="checkbox"
+					value="email"
+					id="emailCheck"
+				/>
+				<label class="form-check-label" for="emailCheck"> Email </label>
+			</div>
+			<div class="form-check">
+				<input
+					name="user[preferredContact]"
+					class="form-check-input"
+					type="checkbox"
+					value="sms"
+					id="smsCheck"
+				/>
+				<label class="form-check-label" for="smsCheck"> SMS/Text </label>
+			</div>
+			<button>Checkout</button>
+		</div>
+	</div>
+</form>

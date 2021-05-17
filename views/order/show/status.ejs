@@ -1,22 +1,18 @@
-<% layout('layouts/admintemplate') %>
-
-<a class="btn btn-danger btn-lg" href="/order/index?status=pending">Back</a>
+<% layout('layouts/boilerplate') %>
+<a class="btn btn-danger btn-lg" href="/order/history">Back</a>
 <div>
 	<h1 class="d-inline">order&num; <%= order._id %></h1>
-	<p class="fs-2 fw-bold">Status&colon; <%= order.status %></p>
+	<p class="d-flex justify-content-end fs-3">
+		Status&colon; <%= order.status %>
+	</p>
 </div>
-<div class="row g-3">
-	<div class="col-md-6 col-sm-12">
-		<div id="map" style="height: 300px"></div>
-	</div>
-	<div class="col-md-6 col-sm-12">
+<div class="row">
+	<div class="col-6">
 		<div class="card mb-3">
 			<div class="card-body">
 				<p class="text-end m-0"><%= order.createdAt.format("mmm d, yyyy") %></p>
 				<h5 class="card-title">
-					<%= order.contact.user ? order.contact.user.firstname :
-					order.contact.firstname %> <%= order.contact.user ?
-					order.contact.user.lastname : order.contact.lastname %>
+					<%= order.contact.firstname %> <%= order.contact.lastname %>
 				</h5>
 				<p class="mb-0">
 					Delivery date: <%= order.deliveryDate.format("dddd, mmmm d, yyyy") %>
@@ -46,8 +42,8 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-12">
-		<%for(let item of order.items){ %>
+	<div class="col-6">
+		<%for(let item of order.items){ %> <% if(item.product) {%>
 		<div class="card mb-3">
 			<div class="card-body">
 				<h5 class="card-title"><%= item.product.name %> x<%=item.qty%></h5>
@@ -55,25 +51,27 @@
 				<p>Comment&colon; <%= item.specialInstructions %></p>
 			</div>
 		</div>
-		<% } %>
+		<% } %> <% if(item.combo) {%>
+		<div class="card mb-3">
+			<div class="card-body">
+				<h5 class="card-title"><%= item.combo.name %> x<%=item.qty%></h5>
+				<p class="card-text text-muted"><%= item.diet %></p>
+				<p class="mb-0">Includes&colon;</p>
+				<ul>
+					<% for(let prod of item.combo.products){ %>
+					<li><%= prod.name %></li>
+					<% } %>
+				</ul>
+				<p>Comment&colon; <%= item.specialInstructions %></p>
+			</div>
+		</div>
+		<% } %> <% } %>
 		<form
+			action="/order/cancel/<%= order._id %>"
 			class="text-end mb-3"
-			action="/order/<%= order._id %>/status"
 			method="POST"
 		>
-			<button class="btn btn-danger btn-lg" name="action" value="decline">
-				Decline
-			</button>
-			<button class="btn btn-primary btn-lg me-1 <%= order.status === "approved"
-			? 'd-none':'' %>" name="action" value="approved">Approve <button
-			class="btn btn-success btn-lg <%= order.status === "pending" ? 'd-none':''
-			%> " name="action" value="completed">Complete
+			<button class="btn btn-danger btn-lg">Cancel Order</button>
 		</form>
 	</div>
 </div>
-
-<script>
-	const mapToken = "<%-process.env.MAPBOX_TOKEN%>";
-	const orderGeo = <%-JSON.stringify(order.geometry)%>
-</script>
-<script src="/javascripts/showMap.js"></script>

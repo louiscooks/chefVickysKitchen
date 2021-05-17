@@ -8,17 +8,17 @@ module.exports.addProductForm = async (req, res) => {
 	});
 };
 module.exports.addProduct = async (req, res) => {
+	console.log("this is req.body.product", req.body.product);
 	const product = await new Product(req.body.product);
+	console.log("this is product", product);
 	await product.save();
 	req.flash("success", "Successfully created a new product!");
 	res.redirect("/product/add");
 };
 module.exports.renderProducts = async (req, res) => {
 	const products = await Product.find();
-	const combos = await Combo.find().populate("products");
 	res.render("admin/product/index", {
-		products,
-		combos
+		products
 	});
 };
 module.exports.showProduct = async (req, res) => {

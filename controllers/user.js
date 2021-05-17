@@ -1,18 +1,9 @@
-const Cart = require("../models/cart");
 const User = require("../models/user");
 
-const loginCart = async function (req) {
-	if (!req.user.shoppingCart) {
-		const cart = await new Cart();
-		const user = await User.findById(req.user._id);
-		user.shoppingCart = cart._id;
-		await user.save();
-	}
-};
 module.exports.login = (req, res) => {
 	if (req.user.isAdmin === true) {
 		req.flash("success", "Welcome Admin");
-		res.redirect("/product/view");
+		res.redirect("/product");
 		return;
 	}
 	console.log("this is req.user", req.user);
@@ -20,6 +11,9 @@ module.exports.login = (req, res) => {
 	const redirectUrl = req.session.returnTo || "/cart/menu";
 	delete req.session.returnTo;
 	res.redirect(redirectUrl);
+};
+module.exports.renderRegister = (req, res) => {
+	res.render("user/register");
 };
 module.exports.register = async (req, res, next) => {
 	try {
@@ -29,33 +23,18 @@ module.exports.register = async (req, res, next) => {
 			password,
 			phoneNumber,
 			firstname,
-			lastname
+			lastname,
+			address
 		} = req.body;
 		const user = await new User({
 			email,
 			username,
 			phoneNumber,
 			firstname,
-			lastname
+			lastname,
+			location: { ...address }
 		});
 		const registeredUser = await User.register(user, password);
-		if (req.session.cart) {
-			registeredUser.shoppingCart = req.session.cart;
-			await registeredUser.save();
-		} else {
-			const cart = await new Cart();
-			req.session.cart = cart._id;
-			req.session.save(async function (err) {
-				if (err) {
-					console.log(err);
-				}
-				await cart.save();
-				registeredUser.shoppingCart = cart._id;
-			});
-			await registeredUser.save();
-			console.log("registered user", registeredUser);
-		}
-		console.log("hitting login route");
 		req.login(registeredUser, (err) => {
 			if (err) return next(err);
 			const redirectUrl = req.session.returnTo || "/cart/menu";
@@ -68,8 +47,8 @@ module.exports.register = async (req, res, next) => {
 	}
 };
 module.exports.logout = (req, res) => {
+	req.session.startOrder = false;
 	req.logout();
-	req.session.cart = null;
 	req.flash("success", "You have logged out successfully.");
 	res.redirect("cart/menu");
 };
@@ -79,7 +58,7 @@ module.exports.renderAdminLogin = (req, res) => {
 module.exports.renderAdminRegister = (req, res) => {
 	res.render("user/adminregister");
 };
-module.exports.registerAdmin = async (req, res, next) => {
+module.exports.registerAdmin = async (req, res) => {
 	try {
 		const { email, username, password } = req.body;
 		const user = await new User({ email, username, isAdmin: true });
@@ -90,6 +69,16 @@ module.exports.registerAdmin = async (req, res, next) => {
 		req.flash("error", e.message);
 		res.redirect("admin/register");
 	}
+};
+module.exports.showAdmin = async (req, res) => {
+	const users = await User.find({ isAdmin: true });
+	console.log("this is users", users);
+	res.render("user/showadmins", { users });
+};
+module.exports.removeAdmin = async (req, res) => {
+	const { id } = req.params;
+	const users = await User.findByIdAndDelete(id);
+	res.redirect("user/showadmins");
 };
 module.exports.logoutAdmin = (req, res) => {
 	req.logout();

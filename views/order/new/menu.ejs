@@ -1,183 +1,126 @@
 <% layout('layouts/orderTemplate') %>
-<body>
-	<div class="container">
-		<div class="row mt-3">
-			<div class="col-6 offset-3">
-				<% if(!query){ %>
-				<h1>Menu</h1>
-				<div class="row">
-					<form action="/cart/add/combo/<%= combo._id %>" method="POST">
-						<div class="card mb-3 pt-3">
-							<div class="card-body">
-								<h5 class="card-title"><%=combo.name %></h5>
-								<ul>
-									<% for(let prod of combo.products){ %>
-									<li><%= prod.name %></li>
-									<% } %>
-								</ul>
+<form class="mb-3" action="/cart/add/products" method="POST">
+	<div class="row g-2">
+		<h1 class="mb-3">Menu</h1>
+		<% if(products.length === 0){%>
+		<div class="col-6 offset-3">
+			<div class="card">
+				<div class="card-body d-flex justify-content-end">
+					<p class="card-text me-auto">No items available for today.</p>
+					<a class="btn btn-danger" href="/order/date">Try another day</a>
+				</div>
+			</div>
+			<% } else{%> <% for(let product of products){ %>
+			<input
+				type="hidden"
+				name="<%= product._id %>[_id]"
+				value="<%= product._id%>"
+			/>
+			<div class="col-md-4 col-sm-12">
+				<div class="card mb-3">
+					<img src="<%= product.image %>" class="card-img-top" />
+					<div class="card-body">
+						<h5 class="card-title"><%=product.name %></h5>
+						<p class="card-text text-muted">
+							<%= product.ingredients.substring(0,50).trim()+"..."%>
+							<a href="">more Info</a>
+						</p>
+						<label class="mb-2" for="">How would you like it?</label>
+						<div class="row g-1 mb-3">
+							<div class="col-6">
 								<div class="form-check">
 									<input
 										class="form-check-input"
 										type="radio"
-										name="cart[diet]"
-										id="default"
+										name="<%= product._id %>[diet]"
+										id="default<%= product._id %>"
 										value="classic"
 										checked
 									/>
-									<label class="form-check-label" for="default">
+									<label
+										class="form-check-label"
+										for="default<%= product._id %>"
+									>
 										Classic
 									</label>
 								</div>
+							</div>
+							<div class="col-6">
 								<div class="form-check">
 									<input
 										class="form-check-input"
 										type="radio"
-										name="cart[diet]"
-										id="vegan"
+										name="<%= product._id %>[diet]"
+										id="vegan<%= product._id %>"
 										value="vegan"
 									/>
-									<label class="form-check-label" for="vegan"> Vegan </label>
+									<label class="form-check-label" for="vegan<%= product._id %>">
+										Vegan
+									</label>
 								</div>
+							</div>
+							<div class="col-6">
 								<div class="form-check">
 									<input
 										class="form-check-input"
 										type="radio"
-										name="cart[diet]"
-										id="pescetarian"
+										name="<%= product._id %>[diet]"
+										id="pescetarian<%= product._id %>"
 										value="pescetarian"
 									/>
-									<label class="form-check-label" for="pescetarian">
+									<label
+										class="form-check-label"
+										for="pescetarian<%= product._id %>"
+									>
 										Pescetarian
 									</label>
 								</div>
+							</div>
+							<div class="col-6">
 								<div class="form-check">
 									<input
 										class="form-check-input"
 										type="radio"
-										name="cart[diet]"
-										id="vegitarian"
+										name="<%= product._id %>[diet]"
+										id="vegitarian<%= product._id %>"
 										value="vegitarian"
 									/>
-									<label class="form-check-label" for="vegitarian">
+									<label
+										class="form-check-label"
+										for="vegitarian<%= product._id %>"
+									>
 										Vegitarian
 									</label>
 								</div>
-								<div class="mt-3">
-									<label class="form-label" for="qty">qty:</label>
-									<select name="cart[qty]" id="qty">
-										<%for(let i = 1; i<= 5; i++){ %>
-										<option value="<%= i %>"><%= i %></option>
-										<%} %>
-									</select>
-								</div>
-								<div class="form-floating">
-									<label for="floatingTextarea">Comments</label>
-									<textarea
-										class="form-control mb-3"
-										name="cart[specialInstructions]"
-										id="floatingTextarea"
-										cols="40"
-										rows="3"
-									></textarea>
-								</div>
-								<div class="d-flex flex-row justify-content-center">
-									<button>Add to Cart</button>
-								</div>
 							</div>
 						</div>
-					</form>
-				</div>
-				<% }%> <% if(query === "true"){ %>
-				<div class="row g-2">
-					<h2>Would you like anything else?</h2>
-					<% for(let product of combo.products){ %>
-					<div class="col-6">
-						<form action="/cart/add/product/<%= product._id %>" method="POST">
-							<div class="card mb-3">
-								<img src="<%= product.image %>" class="card-img-top" />
-								<div class="card-body">
-									<h5 class="card-title"><%=product.name %></h5>
-									<p class="card-text text-muted">
-										<%= product.ingredients.substring(0,50).trim()+"..."%>
-										<a href="">more Info</a>
-									</p>
-									<div class="form-check">
-										<input
-											class="form-check-input"
-											type="radio"
-											name="cart[diet]"
-											id="default"
-											value="classic"
-											checked
-										/>
-										<label class="form-check-label" for="default">
-											Classic
-										</label>
-									</div>
-									<div class="form-check">
-										<input
-											class="form-check-input"
-											type="radio"
-											name="cart[diet]"
-											id="vegan"
-											value="vegan"
-										/>
-										<label class="form-check-label" for="vegan"> Vegan </label>
-									</div>
-									<div class="form-check">
-										<input
-											class="form-check-input"
-											type="radio"
-											name="cart[diet]"
-											id="pescetarian"
-											value="pescetarian"
-										/>
-										<label class="form-check-label" for="pescetarian">
-											Pescetarian
-										</label>
-									</div>
-									<div class="form-check">
-										<input
-											class="form-check-input"
-											type="radio"
-											name="cart[diet]"
-											id="vegitarian"
-											value="vegitarian"
-										/>
-										<label class="form-check-label" for="vegitarian">
-											Vegitarian
-										</label>
-									</div>
-									<div>
-										<label class="form-label" for="qty">qty:</label>
-										<select name="cart[qty]" id="qty">
-											<%for(let i = 1; i<= 5; i++){ %>
-											<option value="<%= i %>"><%= i %></option>
-											<%} %>
-										</select>
-									</div>
-									<div>
-										<label for="instruction"></label>
-										<textarea
-											class="form-control mb-3"
-											name="cart[specialInstructions]"
-											id="instruction"
-											cols="40"
-											rows="3"
-										></textarea>
-									</div>
-									<div class="d-flex flex-row justify-content-center">
-										<button>Add to Cart</button>
-									</div>
-								</div>
-							</div>
-						</form>
+						<div>
+							<label class="form-label" for="qty"> Select qty&colon;</label>
+							<select name="<%= product._id %>[qty]" id="qty">
+								<%for(let i = 1; i<= 5; i++){ %>
+								<option value="<%= i %>"><%= i %></option>
+								<%} %>
+							</select>
+						</div>
+						<div>
+							<label for="instruction<%= product._id %>">comments</label>
+							<textarea
+								class="form-control mb-3"
+								name="<%= product._id %>[specialInstructions]"
+								id="instruction<%= product._id %>"
+								cols="40"
+								rows="3"
+							></textarea>
+						</div>
 					</div>
-					<% } %>
-					<a href="/order/checkout">Continue</a>
 				</div>
-				<% } %>
 			</div>
+			<% } %>
+			<div class="d-flex justify-content-end">
+				<button class="btn btn-success btn-md me-3">Add to Cart</button>
+				<a class="btn btn-primary btn-md" href="/order/checkout">Continue</a>
+			</div>
+			<% } %>
 		</div>
 	</div>
-</body>
+</form>

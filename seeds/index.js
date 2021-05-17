@@ -20,6 +20,7 @@ const seedDB = async () => {
 			name: "Chicken Parmasean",
 			price: 15.0,
 			category: "other meats",
+			combo: "Monday",
 			image: "https://source.unsplash.com/collection/345760/1600x900",
 			qty: 0,
 			ingredients:
@@ -29,6 +30,7 @@ const seedDB = async () => {
 			name: "Lobster Bisque",
 			price: 10.5,
 			category: "seafood",
+			combo: "Monday",
 			image: "https://source.unsplash.com/collection/345760/1600x900",
 			qty: 0,
 			ingredients:
@@ -38,6 +40,7 @@ const seedDB = async () => {
 			name: "Califlower Rice and Impossible Meatballs",
 			price: 17.2,
 			category: "vegan",
+			combo: "Tuesday",
 			image: "https://source.unsplash.com/collection/345760/1600x900",
 			qty: 0,
 			ingredients:
@@ -47,6 +50,7 @@ const seedDB = async () => {
 			name: "BBQ Habanero Wings",
 			price: 8.0,
 			category: "other meats",
+			combo: "Tuesday",
 			image: "https://source.unsplash.com/collection/345760/1600x900",
 			qty: 0,
 			ingredients:

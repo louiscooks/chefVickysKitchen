@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const User = require("./user");
 const { Schema } = mongoose;
 
 const orderSchema = new Schema({
@@ -21,7 +22,6 @@ const orderSchema = new Schema({
 		state: String,
 		zipcode: String
 	},
-	totalQty: { type: Number, default: 0 },
 	createdAt: { type: Date, default: Date.now },
 	deliveryDate: { type: Date },
 	totalPrice: { type: Number, min: 0, default: 0 },
@@ -32,6 +32,10 @@ const orderSchema = new Schema({
 		email: String,
 		phoneNumber: String,
 		preferredContact: [String]
+	},
+	status: {
+		type: String,
+		enum: ["pending", "approved", "completed", "denied"]
 	},
 	geometry: {
 		type: {
@@ -45,5 +49,6 @@ const orderSchema = new Schema({
 		}
 	}
 });
+
 const Order = mongoose.model("Order", orderSchema);
 module.exports = Order;

@@ -1,0 +1,86 @@
+<% layout('layouts/admintemplate') %>
+<form action="/order/index">
+	<div class="row mb-3">
+		<div class="col-sm-3 mb-3 me-3">
+			<div class="input-group">
+				<input
+					class="form-control"
+					type="search"
+					placeholder="OrderID"
+					name="querySearch"
+					aria-label="Search"
+				/>
+			</div>
+		</div>
+		<div class="col-sm-3">
+			<button class="btn btn-outline-success" type="submit">Search</button>
+		</div>
+	</div>
+</form>
+<% if(orders.length === 0){ %>
+<div class="card">
+	<div class="card-body">
+		<p class="card-text">No orders have been placed.</p>
+	</div>
+</div>
+<% } else{%>
+<table class="table table-hover table-responsive-md">
+	<thead>
+		<tr>
+			<th scope="col">OrderID</th>
+			<th scope="col">First</th>
+			<th scope="col">Last</th>
+			<th scope="col">Date</th>
+			<th scope="col">Status</th>
+			<th scope="col">More Info</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% if(orders.length){ %> <% for(let order of orders){%>
+		<tr>
+			<th scope="row"><%= order._id%></th>
+			<td>
+				<%= order.contact.user? order.contact.user.firstname :
+				order.contact.firstname %>
+			</td>
+			<td>
+				<%= order.contact.user? order.contact.user.lastname :
+				order.contact.lastname %>
+			</td>
+			<td>
+				<%= order.createdAt.format('dddd, mmmm d, yyyy') %> <%=
+				order.createdAt.toLocaleTimeString("en-US") %>
+			</td>
+			<td><%= order.status%></td>
+			<td>
+				<form action="/order/<%= order._id %>/show">
+					<button class="btn btn-info btn-sm">View Order</button>
+				</form>
+			</td>
+		</tr>
+		<% }%> <% } else{%>
+		<tr>
+			<th scope="row"><%= orders._id%></th>
+			<td>
+				<%= orders.contact.user? orders.contact.user.firstname :
+				orders.contact.firstname %>
+			</td>
+			<td>
+				<%= orders.contact.user? orders.contact.user.lastname :
+				orders.contact.lastname %>
+			</td>
+			<td>
+				<%= orders.createdAt.format('dddd, mmmm d, yyyy') %> <%=
+				orders.createdAt.toLocaleTimeString("en-US") %>
+			</td>
+			<td><%= orders.status%></td>
+			<td>
+				<form action="/order/<%= orders._id %>/show">
+					<button class="btn btn-info btn-sm">View Order</button>
+				</form>
+			</td>
+		</tr>
+		<% } %>
+	</tbody>
+</table>
+<% } %>

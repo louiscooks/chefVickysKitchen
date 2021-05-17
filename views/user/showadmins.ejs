@@ -1,0 +1,40 @@
+<% layout('layouts/admintemplate') %> <% if(users.length === 0){ %>
+<div class="card">
+	<div class="card-body">
+		<p class="card-text">No users have been placed.</p>
+	</div>
+</div>
+<% } else{%>
+<table class="table table-hover table-responsive-md">
+	<thead>
+		<tr>
+			<th scope="col">First</th>
+			<th scope="col">Last</th>
+			<th scope="col">Remove User</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% if(users.length){ %> <% for(let user of users){%>
+		<tr>
+			<th scope="row"><%= user.firstname%></th>
+			<td><%= user.lastname %></td>
+			<td>
+				<form action="/admin/<%= user._id %>/delete" method="POST">
+					<button class="btn btn-danger btn-sm">Remove</button>
+				</form>
+			</td>
+		</tr>
+		<% }%> <% } else{%>
+		<tr>
+			<th scope="row"><%=users.firstname %></th>
+			<td><%= users.lastname %></td>
+			<td>
+				<form action="/admin/<%= users._id %>/delete" method="POST">
+					<button class="btn btn-danger btn-sm">Remove User</button>
+				</form>
+			</td>
+		</tr>
+		<% } %>
+	</tbody>
+</table>
+<% } %>

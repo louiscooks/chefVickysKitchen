@@ -6,10 +6,10 @@ const product = require("../controllers/product");
 
 router.get("", catchAsync(product.renderProducts));
 router.get("/add", product.addProductForm);
-router.post("/add", checkForAdmin, catchAsync(product.addProduct));
+router.post("/add", catchAsync(product.addProduct));
 router.get("/:id/view", catchAsync(product.showProduct));
-router.get("/:id/edit", checkForAdmin, catchAsync(product.editProductForm));
-router.put("/:id/edit", checkForAdmin, catchAsync(product.editProduct));
+router.get("/:id/edit", catchAsync(product.editProductForm));
+router.put("/:id/edit", catchAsync(product.editProduct));
 router.delete("/:id", checkForAdmin, catchAsync(product.deleteProduct));
 
 module.exports = router;

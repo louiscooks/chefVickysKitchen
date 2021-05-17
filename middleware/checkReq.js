@@ -1,5 +1,4 @@
 const ExpressError = require("../utilities/ExpressError");
-const checkForAdmin = require("./checkForAdmin");
 
 const checkReq = function (req, res, next) {
 	const comboReq = req.body.combo;

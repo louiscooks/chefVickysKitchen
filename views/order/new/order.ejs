@@ -10,35 +10,21 @@
 		<div class="row g-3">
 			<div class="col-12">
 				<label for="inputAddress" class="form-label">Address</label>
-				<input
-					name="address[street]"
-					type="text"
-					class="form-control"
-					id="inputAddress"
-					placeholder="1234 Main St"
-					required
-				/>
+				<input value="<%= currentUser ? currentUser.location.street :""%>"
+				name="address[street]" type="text" class="form-control"
+				id="inputAddress" placeholder="1234 Main St" required />
 			</div>
 			<div class="col-12">
 				<label for="inputAddress2" class="form-label">Apt/Suite/Unit</label>
-				<input
-					name="address[unit]"
-					type="text"
-					class="form-control"
-					id="inputAddress2"
-					placeholder="Apartment, studio, or floor"
-				/>
+				<input value="<%= currentUser ? currentUser.location.unit :""%>"
+				name="address[unit]" type="text" class="form-control" id="inputAddress2"
+				placeholder="Apartment, studio, or floor" />
 			</div>
 			<div class="col-md-6">
 				<label for="inputCity" class="form-label">City</label>
-				<input
-					name="address[city]"
-					required
-					type="text"
-					placeholder="Miami"
-					class="form-control"
-					id="inputCity"
-				/>
+				<input value="<%= currentUser ? currentUser.location.city :""%>"
+				name="address[city]" required type="text" placeholder="Miami"
+				class="form-control" id="inputCity" />
 			</div>
 			<div class="col-md-4">
 				<label for="inputState" class="form-label">State</label>
@@ -48,17 +34,13 @@
 			</div>
 			<div class="col-md-2">
 				<label for="inputZip" class="form-label">Zip</label>
-				<input
-					required
-					type="text"
-					name="address[zipcode]"
-					class="form-control"
-					id="inputZip"
-				/>
+				<input required value="<%= currentUser ? currentUser.location.zipcode
+				:""%>" type="text" name="address[zipcode]" class="form-control"
+				id="inputZip" />
 			</div>
 		</div>
 		<div class="d-flex flex-row justify-content-end mt-3">
-			<button class="btn btn-success btn-md">Continue</button>
+			<button class="btn btn-primary btn-md">Continue</button>
 		</div>
 	</form>
 </div>

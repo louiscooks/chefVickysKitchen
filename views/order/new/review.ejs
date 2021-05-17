@@ -1,0 +1,53 @@
+<% layout('layouts/confirmationTemplate') %>
+<h1>Does everything look correct?</h1>
+<div class="col-6">
+	<div class="row">
+		<div class="card mb-3">
+			<div class="card-body">
+				<a class="d-flex justify-content-end" href="/order/contact"
+					>Edit Contact</a
+				>
+				<h5 class="card-title">
+					<%= cart.contact.user ? cart.contact.user.firstname :
+					cart.contact.firstname %> <%= cart.contact.user ?
+					cart.contact.user.lastname : cart.contact.lastname %>
+				</h5>
+				<p class="mb-0">
+					Delivery date: <%= cart.deliveryDate.format("dddd, mmmm d, yyyy") %>
+				</p>
+				<p>
+					Address: <%= cart.location.street %> <%= cart.location.unit?
+					cart.location.unit:''%>&comma; <%= cart.location.city %>&comma; <%=
+					cart.location.state %>&comma; <%= cart.location.zipcode %>
+				</p>
+				<p class="mb-0">
+					Email&colon; <%= cart.contact.user ? cart.contact.user.email :
+					cart.contact.email %>
+				</p>
+				<p>
+					Phone&colon; <%= cart.contact.user ? cart.contact.user.phoneNumber :
+					cart.contact.phoneNumber %>
+				</p>
+				<a class="d-flex justify-content-end" href="/order/checkout"
+					>Edit Order</a
+				>
+				<%for(let item of cart.items){ %>
+				<h5 class="card-title"><%= item.product.name %> x<%=item.qty%></h5>
+				<p class="card-text text-muted"><%= item.diet %></p>
+				<p>Comment&colon; <%= item.specialInstructions %></p>
+				<% if (item.specialInstructions){ %>
+				<p><%= item.specialInstructions %></p>
+				<% } %> <% } %>
+				<p class="fs-3 fw-3">
+					Total&colon; <%=priceFormatter(cart.totalPrice)%>
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class="mb-3">
+		<a class="btn btn-danger btn-order btn-lg" href="/order/end">Cancel</a>
+		<form class="d-inline" action="/order/confirmed" method="POST">
+			<button class="btn btn-success btn-lg">Submit</button>
+		</form>
+	</div>
+</div>

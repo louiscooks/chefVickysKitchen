@@ -1,149 +1,148 @@
 const dateFormat = require("../date/DateFormat");
 const Cart = require("../models/cart");
 const Product = require("../models/product");
-const Order = require("../models/order");
-const Combo = require("../models/combo");
+const verifyProductQtyModule = require("../utilities/verifyProductModule");
 
 module.exports.showMenu = async (req, res) => {
+	req.session.startOrder = false;
+	const days = [
+		"Sunday",
+		"Monday",
+		"Tuesday",
+		"Wednesday",
+		"Thursday",
+		"Friday",
+		"Saturday"
+	];
 	const products = await Product.find();
+
 	res.render("cart/index", {
-		products
+		products,
+		days
 	});
 };
-module.exports.showCart = async (req, res) => {
-	const yourCart = req.session.cart;
-	const cart = await Cart.findById(req.session.cart)
-		.populate({
-			path: "items",
-			populate: {
-				path: "product"
-			}
-		})
-		.populate({
-			path: "items",
-			populate: {
-				path: "combo",
-				populate: "products"
-			}
-		});
-	res.render("order/new/checkout", {
-		cart,
-		yourCart,
-		req
-	});
-};
-module.exports.addComboToCart = async (req, res) => {
-	const { id } = req.params;
-	const item = req.body.cart;
-	const combo = await Combo.findById(id);
-	const storedCart = await Cart.findById(req.session.cart);
-	console.log("found storedcart", storedCart);
-	itemFound = false;
-	storedCart.items.forEach(async (element) => {
-		if (combo._id.toString() === element.combo.toString()) {
-			if (
-				req.body.cart.specialInstructions === element.specialInstructions &&
-				req.body.cart.diet === element.diet
-			) {
-				// increment the quantity
-				element.qty++;
-				itemFound = true;
-				await storedCart.save();
-				console.log("incrementing qty by 1", storedCart);
-				return;
-			}
+
+module.exports.addDateSaveDay = async function (req, res) {
+	const cart = await Cart.findById(req.session.cart);
+	console.log("adding date to combo");
+	const date = new Date(req.body.deliveryDate);
+	const days = [
+		"Sunday",
+		"Monday",
+		"Tuesday",
+		"Wednesday",
+		"Thursday",
+		"Friday",
+		"Saturday"
+	];
+	if (date.getDay() + 1 === 7 || date.getDay() + 1 === 6) {
+		console.log("day is set to weekend");
+		req.flash("error", "This day is unavailable for delivery");
+		return res.redirect("/order/date");
+	}
+	cart.deliveryDate = req.body.deliveryDate;
+	await cart.save();
+	let dayOfTheWeek = days[date.getDay() + 1];
+	req.session.day = dayOfTheWeek;
+	req.session.save(function (err) {
+		if (err) {
+			console.log(err);
 		}
+		console.log("day of the week saved to session");
 	});
-	if (!itemFound) {
-		//push product in cart
-		storedCart.items.push({
-			combo: combo._id,
-			qty: item.qty,
-			specialInstructions: item.specialInstructions,
-			diet: item.diet
+	res.redirect("/order/menu");
+	return;
+};
+module.exports.addProductsToCart = async (req, res) => {
+	const storedCart = await Cart.findById(req.session.cart);
+	const products = await Product.find({ combo: req.session.day });
+	let itemfound = false;
+	if (storedCart.items.length) {
+		itemfound = true;
+		storedCart.items.forEach(async (el) => {
+			console.log("el.product._id", el.product._id);
+			let i = req.body[el.product._id];
+			console.log("strored cart i", i);
+			if (i) {
+				if (
+					i.specialInstructions === el.specialInstructions &&
+					i.diet === el.diet
+				) {
+					// increment the quantity
+					let x = el.qty;
+					let y = i.qty;
+					el.qty = parseInt(x) + parseInt(y);
+					console.log("incrementing qty by 1");
+				} else {
+					storedCart.items.push({
+						product: i._id,
+						qty: i.qty,
+						diet: i.diet,
+						specialInstructions: i.specialInstructions
+					});
+				}
+			}
 		});
 		await storedCart.save();
-		console.log("pushing item in stored cart", storedCart);
 	}
-	res.redirect("/order/menu?product=true");
-};
-module.exports.addProductToCart = async (req, res) => {
-	const { id } = req.params;
-	const item = req.body.cart;
-	const product = await Product.findById(id);
-	const storedCart = await Cart.findById(req.session.cart);
-	console.log("found storedcart", storedCart);
-	let itemFound = false;
-	storedCart.items.forEach(async (element) => {
-		if (product._id.toString() === element.product.toString()) {
-			if (
-				req.body.cart.specialInstructions === element.specialInstructions &&
-				req.body.cart.diet === element.diet
-			) {
-				// increment the quantity
-				element.qty++;
-				itemFound = true;
-				await storedCart.save();
-				console.log("incrementing qty by 1", storedCart);
-				return;
+	if (products.length && !itemfound) {
+		products.forEach(async (el) => {
+			console.log("el._id", el._id);
+			let i = req.body[el._id];
+			console.log("i", i);
+			if (i) {
+				storedCart.items.push({
+					product: el._id,
+					qty: i.qty,
+					diet: i.diet,
+					specialInstructions: i.specialInstructions
+				});
 			}
-		}
-	});
-	if (!itemFound) {
-		//push product in cart
-		storedCart.items.push({
-			product: product._id,
-			qty: item.qty,
-			specialInstructions: item.specialInstructions,
-			diet: item.diet
 		});
 		await storedCart.save();
-		console.log("pushing item in stored cart", storedCart);
+		console.log("this is stored cart", storedCart);
 	}
-	res.redirect("/order/menu?product=true");
+	req.flash("success", "Your order has been added to your cart.");
+	res.redirect("/order/menu");
 };
 module.exports.finalizeCart = async (req, res) => {
 	const { id } = req.params;
 	const action = req.body.action;
-	const storedCart = await Cart.findById(id);
-	console.log("this is req.body", req.body);
-	const orderModule = async function () {
-		if (req.user) {
-			const order = await new Order({
-				contact: { user: req.user._id },
-				deliveryDate: storedCart.deliveryDate
-			});
-			return order;
-		} else {
-			const order = await new Order({
-				contact: { ...req.body.user },
-				deliveryDate: storedCart.deliveryDate
-			});
-			if (!order.contact.preferredContact)
-				req.body.user.preferredContact.forEach((element) => {
-					order.contact.preferredContact.push(element);
-					return order;
-				});
-			return order;
+	const storedCart = await Cart.findById(id).populate({
+		path: "items",
+		populate: {
+			path: "product"
 		}
-	};
-	const receipt = await orderModule();
+	});
+	if (await verifyProductQtyModule(req, res)) {
+		console.log("ending code here");
+		return;
+	}
+	console.log("ending continuing code");
+	console.log("this is req.body", req.body);
 	if (action === "checkout_button") {
+		let p = 0;
 		storedCart.items.forEach(async (element) => {
 			let i = req.body[element._id];
-			element.qty = i.qty;
-			element.specialInstructions = i.specialInstructions;
-			receipt.items.push(element);
+			console.log("this is i saving final changes before", i);
+			if (i) {
+				element.qty = i.qty;
+				element.specialInstructions = i.specialInstructions;
+				if (element.product) {
+					let a = parseInt(element.qty) * parseInt(element.product.price);
+					p += a;
+				}
+			}
 		});
+		storedCart.totalPrice = p;
 		await storedCart.save();
-
 		console.log("checkedout stored cart", storedCart);
-		console.log("this is order receipt", receipt);
-		res.send("checkout");
+		res.redirect("/order/contact");
 	} else if (action === "update_button") {
 		console.log("storedCart before changes saved", storedCart);
 		storedCart.items.forEach(async (element) => {
 			let i = req.body[element._id];
+			console.log("this is i", i);
 			if (!i) {
 				await Cart.findByIdAndUpdate(
 					id,
@@ -154,11 +153,12 @@ module.exports.finalizeCart = async (req, res) => {
 				);
 			} else {
 				element.qty = i.qty;
-				element.specialInstructions = i.specialInstructions;
+				element.specialInstructions = i.specialInstructions.trim();
 			}
 		});
 		await storedCart.save();
 		console.log("cart saved", storedCart);
+		req.flash("success", "Your cart has been updated successfully.");
 		res.redirect("/order/checkout");
 	}
 };

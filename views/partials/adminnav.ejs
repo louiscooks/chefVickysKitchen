@@ -28,14 +28,10 @@
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 							<li>
-								<a class="dropdown-item" href="/product"
-									>View Products &amp; Combos</a
-								>
+								<a class="dropdown-item" href="/product">View Products</a>
 							</li>
 							<li>
-								<a class="dropdown-item" href="/product/add"
-									>Add New Product or Combo</a
-								>
+								<a class="dropdown-item" href="/product/add">Add New Product</a>
 							</li>
 						</ul>
 					</div>
@@ -52,30 +48,19 @@
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 							<li>
-								<a class="dropdown-item" href="#">Upcoming Orders</a>
+								<a class="dropdown-item" href="/order/index?status=pending"
+									>Pending Orders</a
+								>
 							</li>
 							<li>
-								<a class="dropdown-item" href="#">Completed Orders</a>
-							</li>
-						</ul>
-					</div>
-					<div class="nav-item dropdown">
-						<a
-							class="nav-link dropdown-toggle border-end pe-2"
-							href="#"
-							id="navbarDropdownMenuLink"
-							role="button"
-							data-bs-toggle="dropdown"
-							aria-expanded="false"
-						>
-							Promotions
-						</a>
-						<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-							<li>
-								<a class="dropdown-item" href="#">View Promotions</a>
+								<a class="dropdown-item" href="/order/index?status=approved"
+									>Approved Orders</a
+								>
 							</li>
 							<li>
-								<a class="dropdown-item" href="#">Create promotion</a>
+								<a class="dropdown-item" href="/order/index?status=completed"
+									>Completed Orders</a
+								>
 							</li>
 						</ul>
 					</div>
@@ -101,8 +86,11 @@
 							</li>
 							<li>
 								<a class="dropdown-item" href="/admin/register"
-									>Create new admin</a
+									>Register new admin</a
 								>
+							</li>
+							<li>
+								<a class="dropdown-item" href="/admin/view">View admins</a>
 							</li>
 							<%} %>
 						</ul>

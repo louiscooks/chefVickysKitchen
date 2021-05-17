@@ -5,9 +5,13 @@ const authenticateUser = function (req, res, next) {
 		if (err) {
 			return next(err);
 		}
+		if (!user && req.body.action === "adminBtn") {
+			req.flash("error", "Incorrect username or password.");
+			return res.redirect("/admin/login");
+		}
 		if (!user) {
 			req.flash("error", "Incorrect username or password.");
-			return res.redirect("/order/menu");
+			return res.redirect("/cart/menu");
 		}
 		req.logIn(user, function (err) {
 			if (err) {
@@ -16,12 +20,6 @@ const authenticateUser = function (req, res, next) {
 			if (req.user.isAdmin) {
 				return next();
 			}
-			req.session.cart = req.user.shoppingCart;
-			req.session.save(function (err) {
-				if (err) {
-					console.log(err);
-				}
-			});
 			return next();
 		});
 	})(req, res, next);

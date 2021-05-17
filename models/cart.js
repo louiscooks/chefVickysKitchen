@@ -5,15 +5,23 @@ const cartSchema = new Schema({
 	items: [
 		new Schema(
 			{
-				combo: { type: Schema.Types.ObjectId, ref: "Combo" },
 				product: { type: Schema.Types.ObjectId, ref: "Product" },
-				qty: Number,
+				qty: { type: Number, min: 1 },
 				specialInstructions: String,
 				diet: String
 			},
 			{ _id: true }
 		)
 	],
+	contact: {
+		user: { type: Schema.Types.ObjectId, ref: "User" },
+		firstname: String,
+		lastname: String,
+		email: String,
+		phoneNumber: String,
+		preferredContact: [String]
+	},
+	totalPrice: { type: Number, min: 0, default: 0 },
 	deliveryDate: { type: Date },
 	location: {
 		street: String,

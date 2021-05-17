@@ -1,35 +1,100 @@
 <% layout('layouts/admintemplate') %>
-    <div class="row">
-        <h1 class="text-center">Edit Product</h1>
-        <div class="col-6 offset-3">
-            <form action="/product/<%= product._id %>/edit?_method=PUT" method="POST" novalidate class="needs-validation">
-                <div class="mb-3">
-                    <label class="form-label" for="name">Product Name</label>
-                    <input class="form-control" type="text" value="<%= product.name %>" name="product[name]"
-                        id="name" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="price">Price</label>
-                    <input class="form-control" type="number" value="<%= product.price%>" name="product[price]"
-                        id="price" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="image">Image Url</label>
-                    <input class="form-control" type="text" value="<%= product.image%>" name="product[image]"
-                        id="image" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="ingredients">Product Ingredients</label>
-                    <textarea class="form-control" type="text" name="product[ingredients]" id="ingredients"
-                        required><%= product.ingredients %></textarea>
-                </div>
-                <div class="col-6">
-                <div class="row mb-3">
-                    <div class="col"> <button class="btn btn-info">Update product</button></div>
-                    <div class="col"> <a  class="btn btn-danger" href="/product/<%= prodduct_id %>/view">Cancel</a></div>
-                </div>
-            </div>
-        </div>
-        
-        </form>
-       
+<div class="col-6 offset-3">
+	<div class="card">
+		<div class="card-body">
+			<h1>Edit Product</h1>
+			<form
+				action="/product/<%= product._id %>/edit?_method=PUT"
+				method="POST"
+				novalidate
+				class="needs-validation"
+			>
+				<div class="row">
+					<div class="col-12">
+						<label class="form-label" for="name">Product Name</label>
+						<div class="input-group mb-3">
+							<input
+								class="form-control"
+								type="text"
+								value="<%= product.name %>"
+								name="product[name]"
+								id="name"
+								required
+							/>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<label class="form-label" for="price">Price</label>
+						<div class="input-group mb-3">
+							<span class="input-group-text">$</span>
+							<input
+								class="form-control"
+								type="text"
+								value="<%= product.price%>"
+								name="product[price]"
+								id="price"
+								required
+							/>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<label class="form-label" for="image">Image Url</label>
+						<div class="input-group mb-3">
+							<input
+								class="form-control"
+								type="text"
+								value="<%= product.image%>"
+								name="product[image]"
+								id="image"
+								required
+							/>
+						</div>
+					</div>
+					<div class="col-12 mb-3">
+						<label for="combo" class="form-label">Add To Combo</label>
+						<select
+							class="form-select"
+							id="combo"
+							name="product[combo]"
+							aria-label="Default select example"
+						>
+							<option selected class="text-muted">Select a Day...</option>
+							<option value="Sunday" <%= product.combo === "Sunday"
+							?"selected":"" %> >Sunday <option value="Monday" <%= product.combo
+							=== "Monday" ?"selected":"" %> >Monday <option value="Tuesday" <%=
+							product.combo === "Tuesday" ?"selected":"" %> >Tuesday <option
+							value="Wednesday" <%= product.combo === "Wednesday" ?"selected":""
+							%> >Wednesday <option value="Thursday" <%= product.combo ===
+							"Thursday" ?"selected":"" %> >Thursday <option value="Friday" <%=
+							product.combo === "Friday" ?"selected":"" %> >Friday <option
+							value="Saturday" <%= product.combo === "Saturday" ?"selected":""
+							%> >Saturday
+						</select>
+					</div>
+					<div class="col-12">
+						<label class="form-label" for="ingredients"
+							>Product Ingredients</label
+						>
+						<div class="input-group mb-3">
+							<textarea
+								class="form-control"
+								type="text"
+								name="product[ingredients]"
+								id="ingredients"
+								required
+							>
+<%= product.ingredients %></textarea
+							>
+						</div>
+					</div>
+					<div class="text-center">
+						<a class="btn btn-danger" href="/product/<%= product._id %>/view"
+							>Cancel</a
+						>
+						<button class="btn btn-info">Update product</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
