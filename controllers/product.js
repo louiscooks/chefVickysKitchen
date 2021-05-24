@@ -1,17 +1,19 @@
 const Product = require("../models/product");
-const Combo = require("../models/combo");
 
-module.exports.addProductForm = async (req, res) => {
+module.exports.createProductForm = async (req, res) => {
 	const products = await Product.find();
 	res.render("admin/product/new", {
 		products
 	});
 };
-module.exports.addProduct = async (req, res) => {
-	console.log("this is req.body.product", req.body.product);
+module.exports.createProduct = async (req, res) => {
 	const product = await new Product(req.body.product);
+	console.log(req.file);
+	const image = { url: req.file.path, filename: req.file.filename };
+	product.image = image;
 	console.log("this is product", product);
 	await product.save();
+	console.log(product);
 	req.flash("success", "Successfully created a new product!");
 	res.redirect("/product/add");
 };

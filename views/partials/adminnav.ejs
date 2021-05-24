@@ -1,10 +1,11 @@
 <section>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="/order/menu">Chef Vicky's Kitchen</a>
+			<a class="navbar-brand" href="/order/menu">Chef Vickys Kitchen</a>
 			<button
 				class="navbar-toggler"
 				type="button"
+				data-bs-target="#navbarNavDropdown"
 				data-bs-toggle="collapse"
 				data-bs-target="#navbarNav"
 				aria-controls="navbarNav"
@@ -14,8 +15,8 @@
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNavDropdown">
-				<div class="navbar-nav">
-					<div class="nav-item dropdown">
+				<ul class="navbar-nav">
+					<li class="nav-item dropdown">
 						<a
 							class="nav-link dropdown-toggle border-end pe-2"
 							href="#"
@@ -34,37 +35,12 @@
 								<a class="dropdown-item" href="/product/add">Add New Product</a>
 							</li>
 						</ul>
-					</div>
-					<div class="nav-item dropdown">
-						<a
-							class="nav-link dropdown-toggle border-end pe-2"
-							href="#"
-							id="navbarDropdownMenuLink"
-							role="button"
-							data-bs-toggle="dropdown"
-							aria-expanded="false"
-						>
-							Orders
-						</a>
-						<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-							<li>
-								<a class="dropdown-item" href="/order/index?status=pending"
-									>Pending Orders</a
-								>
+					</li>
+							<li class="nav-item">
+								<a class="nav-link border-end pe-2" href="/order/index">Orders</a>
 							</li>
-							<li>
-								<a class="dropdown-item" href="/order/index?status=approved"
-									>Approved Orders</a
-								>
-							</li>
-							<li>
-								<a class="dropdown-item" href="/order/index?status=completed"
-									>Completed Orders</a
-								>
-							</li>
-						</ul>
-					</div>
-					<div class="nav-item dropdown">
+					</li>
+					<li class="nav-item dropdown">
 						<a
 							class="nav-link dropdown-toggle border-end pe-2"
 							href="#"
@@ -94,8 +70,8 @@
 							</li>
 							<%} %>
 						</ul>
-					</div>
-				</div>
+					</li>
+				</ul>
 			</div>
 		</div>
 	</nav>

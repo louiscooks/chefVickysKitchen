@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const productSchema = new Schema({
 	name: String,
-	image: String,
+	image: { url: String, fliename: String },
 	price: String,
 	type: { type: String, enum: ["entree", "drink", "dessert"] },
 	combo: {

@@ -5,6 +5,8 @@ const order = require("../controllers/order");
 const checkForCart = require("../middleware/checkForCart");
 const returnTo = require("../middleware/returnTo");
 
+router.post("/start", order.startOrder);
+router.post("/end", catchAsync(order.endOrder));
 router.get("", checkForCart, order.renderOrder);
 router.post("/address", checkForCart, catchAsync(order.verifyAddress));
 router.get("/date", checkForCart, returnTo, catchAsync(order.renderDate));
@@ -23,7 +25,7 @@ router.get("/success", returnTo, order.orderNumber);
 router.get("/history", returnTo, order.orderHistory);
 router.get("/status/:id", returnTo, order.orderStatus);
 router.post("/cancel/:id", order.cancelOrder);
-router.post("/end", catchAsync(order.endOrder));
+
 //admin page routes
 router.get("/index", catchAsync(order.upcomingOrder));
 router.get("/:id/show", order.showOrder);

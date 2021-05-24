@@ -14,13 +14,19 @@ const {
 	redirectToDelivery,
 	redirectToReview
 } = require("../utilities/redirect");
-const { query } = require("express");
-const { func } = require("joi");
 const Product = require("../models/product");
 
 //routes for proccessing the order
-module.exports.renderOrder = function (req, res) {
+module.exports.startOrder = (req, res) => {
 	req.session.startOrder = true;
+	req.session.save(function (err) {
+		if (err) {
+			console.log(err);
+		}
+	});
+	return res.redirect("/order");
+};
+module.exports.renderOrder = function (req, res) {
 	res.render("order/new/order");
 };
 module.exports.verifyAddress = async function (req, res) {
@@ -89,41 +95,35 @@ module.exports.renderContact = async function (req, res) {
 	});
 };
 module.exports.addContactAndPayment = async function (req, res) {
-	if (req.user) {
-		const cart = await Cart.findById(req.session.cart);
-		console.log("this is cart", cart);
-		cart.contact.user = req.user._id;
-		cart.contact.firstname = req.user.firstname;
-		cart.contact.lastname = req.user.lastname;
-		cart.contact.email = req.user.email;
-		cart.contact.phoneNumber = req.user.phoneNumber;
-		await cart.save();
-		if (!cart.contact.preferredContact.length) {
-			req.body.user.preferredContact.forEach((element) => {
-				cart.contact.preferredContact.push(element);
-			});
-		}
-		console.log("this is cart with contact", cart);
-		res.redirect("/order/review");
-	} else {
-		const { firstname, lastname, phoneNumber, email } = req.body.user;
+	const { firstname, lastname, phoneNumber, email, preferredContact } =
+		req.body.user;
+	const cart = await Cart.findByIdAndUpdate(
+		req.session.cart,
+		{
+			contact: { firstname, lastname, email }
+		},
+		{ new: true }
+	);
+	if (phoneNumber.length) {
 		const userNumber = formatPhoneNumber(phoneNumber);
-		console.log("this is user Number", userNumber);
-		const cart = await Cart.findByIdAndUpdate(
-			req.session.cart,
-			{
-				contact: { firstname, lastname, email, phoneNumber: userNumber }
-			},
-			{ new: true }
-		);
-		if (!cart.contact.preferredContact.length) {
-			req.body.user.preferredContact.forEach((element) => {
-				cart.contact.preferredContact.push(element);
-			});
-		}
-		console.log("this is cart with contact", cart);
-		res.redirect("/order/review");
+		cart.contact.phoneNumber = userNumber;
 	}
+	if (req.user) {
+		cart.contact.user = req.user._id;
+	}
+	if (typeof preferredContact === typeof "string") {
+		console.log("string");
+		const arr = [];
+		arr.push(preferredContact);
+		cart.contact.preferredContact = arr;
+	}
+	if (typeof preferredContact === typeof ["array"]) {
+		console.log("array");
+		cart.contact.preferredContact = preferredContact;
+	}
+	await cart.save();
+	console.log("this is cart with contact", cart);
+	res.redirect("/order/review");
 };
 module.exports.renderReview = async function (req, res) {
 	const cart = await Cart.findById(req.session.cart)
@@ -137,13 +137,6 @@ module.exports.renderReview = async function (req, res) {
 			path: "items",
 			populate: {
 				path: "product"
-			}
-		})
-		.populate({
-			path: "items",
-			populate: {
-				path: "combo",
-				populate: "products"
 			}
 		});
 	if (redirectToContact(cart, req, res)) {
@@ -161,7 +154,9 @@ module.exports.completeOrder = async function (req, res) {
 		deliveryDate: cart.deliveryDate,
 		location: cart.location,
 		geometry: cart.geometry,
-		totalPrice: cart.totalPrice
+		totalPrice: cart.totalPrice,
+		subtotal: cart.subtotal,
+		tax: cart.tax
 	});
 	await order.save();
 	console.log("this is order completed", order);
@@ -260,8 +255,13 @@ module.exports.renderCheckout = async (req, res) => {
 module.exports.endOrder = async function (req, res) {
 	const cart = await Cart.findByIdAndDelete(req.session.cart);
 	req.session.startOrder = false;
+	req.session.save(function (err) {
+		if (err) {
+			console.log(err);
+		}
+	});
 	req.flash("error", "Your order has been cancelled");
-	res.redirect("/cart/menu");
+	return res.redirect("/cart/menu");
 };
 
 //customer route to view order history
@@ -316,18 +316,25 @@ module.exports.upcomingOrder = async function (req, res) {
 			return;
 		}
 	}
-	const { status } = req.query;
-	const orders = await Order.find({ status }).populate({
-		path: "contact",
-		populate: {
-			path: "user"
-		}
-	});
-	console.log("this is orders", orders);
-	if (orders.length === 0) {
-		console.log("0");
+	if (req.query.status) {
+		const { status } = req.query;
+		const orders = await Order.find({ status }).populate({
+			path: "contact",
+			populate: {
+				path: "user"
+			}
+		});
+		res.render("admin/order/index", { orders, dateFormat });
+		return;
+	} else {
+		const orders = await Order.find().populate({
+			path: "contact",
+			populate: {
+				path: "user"
+			}
+		});
+		res.render("admin/order/index", { orders, dateFormat });
 	}
-	res.render("admin/order/index", { orders, dateFormat });
 };
 module.exports.showOrder = async function (req, res) {
 	const { id } = req.params;
@@ -336,13 +343,6 @@ module.exports.showOrder = async function (req, res) {
 			path: "items",
 			populate: {
 				path: "product"
-			}
-		})
-		.populate({
-			path: "items",
-			populate: {
-				path: "combo",
-				populate: "products"
 			}
 		})
 		.populate({
@@ -360,13 +360,11 @@ module.exports.changeStatus = async function (req, res) {
 	const { id } = req.params;
 	const order = await Order.findById(id);
 	if (req.body.action === "approved") {
-		console.log("approved");
 		order.status = "approved";
 		await order.save();
 		req.flash("success", "order has been approved");
 	}
 	if (req.body.action === "completed") {
-		console.log("completed");
 		order.status = "completed";
 		await order.save();
 		req.flash("success", "order has been completed");
@@ -374,16 +372,13 @@ module.exports.changeStatus = async function (req, res) {
 	if (req.body.action === "decline") {
 		console.log("decline");
 		if (order.contact.user) {
-			console.log("denied");
 			order.status = "denied";
 			await order.save();
 			req.flash("success", "order has been denied");
 		} else {
-			console.log("deleted");
 			await order.deleteOne();
 			req.flash("success", "no user account, order has been deleted");
 		}
 	}
-	console.log("redirecting this is order", order);
-	res.redirect("/order/index?status=pending");
+	res.redirect("/order/index");
 };

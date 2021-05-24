@@ -27,6 +27,8 @@
 					order.location.state %>&comma; <%= order.location.zipcode %>
 				</p>
 				<address>
+					Contact via&colon; <% for(let el of order.contact.preferredContact)
+					{%><%= el%> <% } %> <br />
 					Email&colon;
 					<a
 						href="mailto:<%= order.contact.user ? order.contact.user.email :
@@ -35,13 +37,11 @@
 						order.contact.email %></a
 					>
 					<br />
-					Phone&colon;
-					<a
-						href="tel:<%= order.contact.user ? order.contact.user.phoneNumber :
-                    order.contact.phoneNumber %>"
-						><%= order.contact.user ? order.contact.user.phoneNumber :
-						order.contact.phoneNumber %></a
+					<%if(order.contact.phoneNumber){%> Phone&colon;
+					<a href="tel:<%= order.contact.phoneNumber %>"
+						><%= order.contact.phoneNumber %></a
 					>
+					<%}%>
 				</address>
 			</div>
 		</div>

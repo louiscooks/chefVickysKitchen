@@ -1,6 +1,6 @@
-<% layout('layouts/boilerplate') %>
-<h1>View Order History</h1>
-<% if(currentUser){ %>
+<% layout('layouts/boilerplate') %> <% if(currentUser){ %>
+<h1 class="mb-3">View Order History</h1>
+
 <table class="table table-responsive-md">
 	<thead>
 		<tr>
@@ -32,5 +32,29 @@
 		<% }%>
 	</tbody>
 </table>
-
+<% if (user.orders.length === 0){ %>
+<div class="col-6 offset-3">
+	<div class="card">
+		<div class="card-body">
+			<p class="card-text text-center">
+				You have no order history. To place an order
+				<a href="/order">click here</a>
+			</p>
+		</div>
+	</div>
+</div>
+<% } %> <% } else{%>
+<div class="col-6 offset-3">
+	<div class="card">
+		<div class="card-body">
+			<p class="card-text text-center">
+				To keep track of orders placed
+				<a href="" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a
+				>.
+				<br />
+				Don't have an account? <a href="/register">Sign up</a>
+			</p>
+		</div>
+	</div>
+</div>
 <% } %>

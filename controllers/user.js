@@ -17,24 +17,17 @@ module.exports.renderRegister = (req, res) => {
 };
 module.exports.register = async (req, res, next) => {
 	try {
-		const {
-			email,
-			username,
-			password,
-			phoneNumber,
+		const { user, location } = req.body;
+		const { firstname, lastname, username, email, password } = user;
+		const acct = await new User({
 			firstname,
 			lastname,
-			address
-		} = req.body;
-		const user = await new User({
-			email,
 			username,
-			phoneNumber,
-			firstname,
-			lastname,
-			location: { ...address }
+			email,
+			location
 		});
-		const registeredUser = await User.register(user, password);
+		const registeredUser = await User.register(acct, password);
+		console.log("user us registered", registeredUser);
 		req.login(registeredUser, (err) => {
 			if (err) return next(err);
 			const redirectUrl = req.session.returnTo || "/cart/menu";
@@ -44,6 +37,32 @@ module.exports.register = async (req, res, next) => {
 	} catch (e) {
 		req.flash("error", e.message);
 		res.redirect("/register");
+	}
+};
+module.exports.renderProfile = (req, res) => {
+	if (req.user) {
+		res.render("user/profile");
+	} else {
+		req.flash("error", "You must be logged in order to continue");
+		res.redirect("/cart/menu");
+	}
+};
+module.exports.editProfile = async (req, res) => {
+	if (req.user) {
+		console.log(req.body);
+		const user = await User.findByIdAndUpdate(
+			req.user._id,
+			{
+				...req.body.user,
+				location: req.body.location
+			},
+			{ new: true }
+		);
+		req.login(user, (err) => {
+			if (err) return next(err);
+			req.flash("success", "Your profile has successfully been updated");
+			res.redirect("/cart/menu");
+		});
 	}
 };
 module.exports.logout = (req, res) => {

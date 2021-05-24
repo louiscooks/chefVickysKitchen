@@ -1,19 +1,33 @@
 <nav class="navbar navbar-dark bg-dark px-2">
 	<div class="container-md">
-		<a class="navbar-brand" href="/">Chef Vicky's Kitchen</a>
+		<a class="navbar-brand" href="/">Chef Vickys Kitchen</a>
 		<div class="navbar-nav d-flex flex-md-row flex-sm-wrap">
+			<div class="me-3">
+				<% if(!startOrder) {%>
+				<form action="/order/start" id="formStartOrder" method="POST">
+					<a class="nav-link text-white fw-bold btnStartOrder" href="#"
+						>START YOUR ORDER</a
+					>
+				</form>
+				<% } else{%>
+				<form action="/order/end" id="formEndOrder" method="POST">
+					<a class="nav-link text-white fw-bold" href="#" id="btnEndOrder"
+						>Cancel Order</a>
+				</form>
+				<% } %>
+			</div>
 			<% if(!currentUser) { %>
 			<!-- Button trigger modal -->
 			<div class="me-2">
-			<a
-				id="loginForm"
-				class="btn btn-light btn-md"
-				data-bs-toggle="modal"
-				data-bs-target="#loginModal"
-			>
-				Login
-			</a>
-		</div>
+				<a
+					id="loginForm"
+					class="btn btn-light btn-md"
+					data-bs-toggle="modal"
+					data-bs-target="#loginModal"
+				>
+					Login
+				</a>
+			</div>
 			<!-- Modal -->
 			<div
 				class="modal fade"
@@ -27,70 +41,82 @@
 						<div class="modal-header">
 							<h5 class="modal-title" id="exampleModalLabel">Login</h5>
 							<a
-								
 								class="btn-close"
 								data-bs-dismiss="modal"
 								aria-label="Close"
 							></a>
 						</div>
 						<div class="modal-body">
-							<form action="/login" method="POST" class="needs-validation" novalidate>
-							<div class="mb-3">
-								<label class="form-label" for="usernameLogin">Username*</label>
-								<input
-									class="form-control"
-									type="text"
-									name="username"
-									id="usernameLogin"
-									required
-								/>
-							</div>
-							<div class="mb-3">
-								<label class="form-label" for="passwordLogin">Password*</label>
-								<input
-									class="form-control"
-									type="password"
-									name="password"
-									id="passwordLogin"
-									required
-								/>
-							</div>
-						</div>
-						<div class="modal-footer">
-							<p class="d-inline me-auto">* Required Field</p>
-						<button class="btn btn-success">Login</button>
-					</form>
+							<form
+								action="/login"
+								method="POST"
+								class="needs-validation"
+								novalidate
+							>
+								<div class="mb-3">
+									<label class="form-label" for="usernameLogin"
+										>Username*</label
+									>
+									<input
+										class="form-control"
+										type="text"
+										name="username"
+										id="usernameLogin"
+										required
+									/>
+								</div>
+								<div class="mb-3">
+									<label class="form-label" for="passwordLogin"
+										>Password*</label
+									>
+									<input
+										class="form-control"
+										type="password"
+										name="password"
+										id="passwordLogin"
+										required
+									/>
+								</div>
+
+								<div class="modal-footer">
+									<p class="d-inline me-auto">* Required Field</p>
+									<button class="btn btn-success">Login</button>
+								</div>
+							</form>
 						</div>
 					</div>
-				</div>
-			</div>
-			
-			<!-- Button trigger modal -->
-			<div class="me-2">
-<a href="/register" class="btn btn-dark btn-md">
-Sign Up
-</a>
-</div>
-			<%} else { %>
-			<a class="nav-link" href="/logout">Logout</a>
-			<% } %>
-		</div>
-	</div>
-</nav>
-<div class="container-md mb-3">
-	<ul class="nav nav-pills nav-justified">
-		<li class="nav-item">
-			<a class="nav-link <%= url === "/order/contact" ? "active":"" %> " aria-current="page" href="/order/contact"
-				>Contact And Payment</a
-			>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link <%= url === "/order/review" ? "active":"" %> "" aria-current="page" href="/order/review"
-				>Review</a
-			>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link <%= url === "/order/success" ? "active":"" %> "" href="/order/success">Completed</a>
-		</li>
-	</ul>
-</div>
+				
+							</div>
+						</div>
+								<!-- Button trigger modal -->
+								<div class="me-2">
+									<a href="/register" class="btn btn-dark btn-md"> Sign Up </a>
+								</div>
+								<%} else { %>
+								<a class="nav-link" href="/logout">Logout</a>
+								<% } %>
+							</div>
+						</div>
+					 
+							</nav>
+								<div class="container-md mb-3">
+									<ul class="nav nav-pills nav-justified">
+										<li class="nav-item">
+											<a class="nav-link <%= url === "/order/contact" ?
+											"active":"" %>" aria-current="page" href="/order/contact"
+											>Contact And Payment</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link <%= url === "/order/review" ?
+											"active":"" %>" aria-current="page" href="/order/review"
+											>Review</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link <%= url === "/order/success" ?
+											"active":"" %>" href="/order/success">Completed</a>
+										</li>
+									</ul>
+								
+								</div>
+							
+		

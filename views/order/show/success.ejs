@@ -1,25 +1,96 @@
 <% layout('layouts/confirmationTemplate') %>
 <div>
-	<h1>Your order has been placed!</h1>
-	<div>
-		<p class="d-flex justify-content-center">
-			Order ID&colon; <%= order._id %>
-		</p>
-		<% if(currentUser){%>
-		<p>Your order has been saved to your account!</p>
+	<h1 class="mb-5">Chef Vickys Kitchen</h1>
+	<section class="text-sm-center mb-5 py-5 px-3 text-white bg-success bg-gradient">
+		<h2>ORDER CONFIRMATION</h2>
+		<p><%=order.contact.firstname%>&comma; thank you for your order&excl;</p>
 		<p>
-			To view your order's progress
-			<a class="btn btn-sm btn-primary" href="/order/status/<%= order._id %>"
-				>click here!</a
-			>
+			We recieved your order and will contact you as soon as we have confirmed
+			your order. You can find your purchase information below.
 		</p>
-		<% } else{%>
-		<p>
-			To track your order's progress
-			<a data-bs-toggle="modal" data-bs-target="#loginModal">Login</a>
-		</p>
-		<p>If you don't have an account <a href="/register">Sign up</a></p>
-		<% } %>
-		<p>To place another order <a href="/order">click here!</a></p>
+	</section>
+	<section class="mb-3">
+		<div class="text-center">
+			<h3>Order Summary</h3>
+			<p><%= order.createdAt.format("mmm d, yyyy") %></p>
+		</div>
+		<div class="row">
+			<% for(let item of order.items){ %>
+			<div class="col-md-4">
+				<div class="card mb-3 pt-3 border-0 shadow-sm p-3 mb-5 bg-body rounded">
+					<img src="<%= item.product.image %>" class="card-img-top" />
+					<div class="card-body">
+						<h5 class="card-title">
+							<span><%= item.qty %></span> <%=item.product.name %><span
+								class="fw-normal fs-6 text-muted"
+							>
+								<%= item.diet %></span
+							>
+						</h5>
+						<p class="card-text"><%= item.product.ingredients%></p>
+					</div>
+				</div>
+			</div>
+			<% } %>
+		</div>
+	</section>
+	<section class="mb-5">
+		<div class="text-center">
+		<h3>Order Total</h3>
 	</div>
-</div>
+		<div class="col-8 offset-2 card border-0">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-12">
+						<p class="mb-0">
+							subtotal
+							<span class="float-end"
+								>&dollar;<%= order.subtotal.toFixed(2) %></span
+							>
+						</p>
+					</div>
+					<div class="col-12 border-bottom border-3">
+						<p>
+							tax
+							<span class="float-end">&dollar;<%= order.tax.toFixed(2) %></span>
+						</p>
+					</div>
+					<div class="col-12">
+						<p>
+							Total
+							<span class="float-end">&dollar;<%= order.totalPrice%></span>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</section>
+	<section class=" text-sm-center mb-5 py-5 px-3 bg-secondary bg-gradient text-white">
+			<h3>Track Your Order</h3>
+			<p >
+				Order ID&colon; <%= order._id %>
+			</p>
+		<p class="pb-1 border-bottom border-3">You will be sent an email with updates on your order's status.</p>
+			<% if(currentUser){%>
+			<p>Your order has been saved to your account!</p>
+			<p>
+				To view your order's progress
+				<a class="fw-bold text-white" href="/order/status/<%= order._id %>"
+					>click here!</a
+				>
+			</p>
+			<% } else{%>
+			<p>
+				To track your order's progress
+				<a data-bs-toggle="modal" class="fw-bold text-white" data-bs-target="#loginModal">Login</a>
+			</p>
+			<p>If you don't have an account <a class="fw-bold text-white" href="/register">Sign up</a></p>
+			<% } %>
+		</div>
+	</section>
+	<div class="text-sm-center mb-3">
+		<h3>Placing Another Order&quest;</h3>
+		<a class="btn btn-success btn-lg" href="/order">Yes</a>
+		<a class="btn btn-danger btn-lg" href="/cart/menu">No</a>
+	</div>

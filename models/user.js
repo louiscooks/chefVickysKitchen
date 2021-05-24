@@ -2,12 +2,11 @@ const { number } = require("joi");
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const passportLocalMongoose = require("passport-local-mongoose");
-const Order = require("./order");
 
 const userSchema = new Schema({
 	firstname: String,
 	lastname: String,
-	phoneNumber: String,
+	phoneNumber: Number,
 	location: {
 		street: String,
 		unit: String,
@@ -25,15 +24,6 @@ const userSchema = new Schema({
 });
 
 userSchema.plugin(passportLocalMongoose);
-
-userSchema.post("findOneAndDelete", async function (doc) {
-	if (doc) {
-		console.log("this is doc", doc);
-		// await Order.deleteMany({
-		// 	_id: { $in: doc.orders }
-		// });
-	}
-});
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;

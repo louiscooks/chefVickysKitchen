@@ -1,14 +1,16 @@
 <header>
 	<nav class="navbar navbar-dark bg-dark px-2 ">
 		<div class="container-md">
-			<a class="navbar-brand" href="/">Chef Vicky's Kitchen</a>
+			<a class="navbar-brand" href="/">Chef Vickys Kitchen</a>
 			<div class="navbar-nav d-flex flex-md-row flex-sm-wrap">
 				<div class="me-3">
 				<% if(!startOrder) {%> 
-				<a class="nav-link text-white fw-bold" href="/order">START YOUR ORDER</a>
+					<form action="/order/start" id="formStartOrder" method="POST">
+				<a class="nav-link text-white fw-bold btnStartOrder" href="#">START YOUR ORDER</a>
+			</form>
 				<% } else{%> 
-					<form action="/order/end" method="POST">
-				<button class="nav-link text-white">Cancel Order</button>
+					<form action="/order/end" id="formEndOrder" method="POST">
+				<a class="nav-link text-white fw-bold" href="#" id="btnEndOrder">Cancel Order</a>
 			</form>
 				<% } %> 
 			</div>
@@ -118,7 +120,7 @@
 					<div class="navbar-nav">
 						<% if(currentUser){ %> 
 						<div class="me-2 border-end pe-2">
-							<a class="nav-link" href="/user/edit">Profile</a>
+							<a class="nav-link" href="/profile">Profile</a>
 						</div>
 						<% } %> 
 					</div>

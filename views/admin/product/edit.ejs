@@ -6,6 +6,7 @@
 			<form
 				action="/product/<%= product._id %>/edit?_method=PUT"
 				method="POST"
+				enctype="multipart/form-data"
 				novalidate
 				class="needs-validation"
 			>
@@ -88,10 +89,12 @@
 						</div>
 					</div>
 					<div class="text-center">
-						<a class="btn btn-danger" href="/product/<%= product._id %>/view"
+						<a
+							class="btn btn-danger mb-3"
+							href="/product/<%= product._id %>/view"
 							>Cancel</a
 						>
-						<button class="btn btn-info">Update product</button>
+						<button class="btn btn-success mb-3">Update product</button>
 					</div>
 				</div>
 			</form>

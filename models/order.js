@@ -1,12 +1,10 @@
 const mongoose = require("mongoose");
-const User = require("./user");
 const { Schema } = mongoose;
 
 const orderSchema = new Schema({
 	items: [
 		new Schema(
 			{
-				combo: { type: Schema.Types.ObjectId, ref: "Combo" },
 				product: { type: Schema.Types.ObjectId, ref: "Product" },
 				qty: Number,
 				specialInstructions: String,
@@ -24,7 +22,9 @@ const orderSchema = new Schema({
 	},
 	createdAt: { type: Date, default: Date.now },
 	deliveryDate: { type: Date },
-	totalPrice: { type: Number, min: 0, default: 0 },
+	totalPrice: { type: String },
+	subtotal: { type: Number, min: 0, default: 0 },
+	tax: { type: Number, min: 0 },
 	contact: {
 		user: { type: Schema.Types.ObjectId, ref: "User" },
 		firstname: String,

@@ -5,17 +5,8 @@ const verifyProductQtyModule = require("../utilities/verifyProductModule");
 
 module.exports.showMenu = async (req, res) => {
 	req.session.startOrder = false;
-	const days = [
-		"Sunday",
-		"Monday",
-		"Tuesday",
-		"Wednesday",
-		"Thursday",
-		"Friday",
-		"Saturday"
-	];
+	const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 	const products = await Product.find();
-
 	res.render("cart/index", {
 		products,
 		days
@@ -56,41 +47,36 @@ module.exports.addDateSaveDay = async function (req, res) {
 module.exports.addProductsToCart = async (req, res) => {
 	const storedCart = await Cart.findById(req.session.cart);
 	const products = await Product.find({ combo: req.session.day });
-	let itemfound = false;
-	if (storedCart.items.length) {
-		itemfound = true;
-		storedCart.items.forEach(async (el) => {
-			console.log("el.product._id", el.product._id);
-			let i = req.body[el.product._id];
-			console.log("strored cart i", i);
-			if (i) {
-				if (
-					i.specialInstructions === el.specialInstructions &&
-					i.diet === el.diet
-				) {
-					// increment the quantity
-					let x = el.qty;
-					let y = i.qty;
-					el.qty = parseInt(x) + parseInt(y);
-					console.log("incrementing qty by 1");
-				} else {
-					storedCart.items.push({
-						product: i._id,
-						qty: i.qty,
-						diet: i.diet,
-						specialInstructions: i.specialInstructions
-					});
+	console.log("this is req.body", req.body);
+	let cartObj = {};
+	for (let i = 0; i < storedCart.items.length; i++) {
+		cartObj[storedCart.items[i].product._id] = storedCart.items[i];
+	}
+	if (products.length) {
+		console.log("adding products triggered");
+		products.forEach(async (el) => {
+			let itemfound = false;
+			let e = cartObj[el._id];
+			console.log("this is e", e);
+			let i = req.body[el._id];
+			console.log("this is i", i);
+			if (e) {
+				if (e.product._id.toString() === i._id.toString()) {
+					if (
+						e.specialInstructions === i.specialInstructions &&
+						e.diet === i.diet
+					) {
+						// increment the quantity
+						let x = i.qty;
+						let y = e.qty;
+						e.qty = parseInt(x) + parseInt(y);
+						itemfound = true;
+						console.log("incrementing qty by 1");
+					}
 				}
 			}
-		});
-		await storedCart.save();
-	}
-	if (products.length && !itemfound) {
-		products.forEach(async (el) => {
-			console.log("el._id", el._id);
-			let i = req.body[el._id];
-			console.log("i", i);
-			if (i) {
+			if (i && !itemfound) {
+				console.log("pushing new item");
 				storedCart.items.push({
 					product: el._id,
 					qty: i.qty,
@@ -101,6 +87,7 @@ module.exports.addProductsToCart = async (req, res) => {
 		});
 		await storedCart.save();
 		console.log("this is stored cart", storedCart);
+		console.log("this is cartObj", cartObj);
 	}
 	req.flash("success", "Your order has been added to your cart.");
 	res.redirect("/order/menu");
@@ -134,7 +121,10 @@ module.exports.finalizeCart = async (req, res) => {
 				}
 			}
 		});
-		storedCart.totalPrice = p;
+		storedCart.subtotal = p;
+		storedCart.tax = p * 0.07;
+		storedCart.totalPrice = (storedCart.subtotal + storedCart.tax).toFixed(2);
+
 		await storedCart.save();
 		console.log("checkedout stored cart", storedCart);
 		res.redirect("/order/contact");

@@ -42,7 +42,7 @@ module.exports.redirectToContact = function (cart, req, res) {
 				res.redirect("/order/contact");
 				return true;
 			}
-		} else if (!cart.contact.lastname) {
+		} else if (!cart.contact.email) {
 			req.flash("error", "Please enter your contact info before continuing");
 			res.redirect("/order/contact");
 			return true;

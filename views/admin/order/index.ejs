@@ -1,7 +1,44 @@
 <% layout('layouts/admintemplate') %>
 <form action="/order/index">
-	<div class="row mb-3">
-		<div class="col-sm-3 mb-3 me-3">
+	<div class="row g-3 mb-3">
+		<div class="col-md-2 mb-3 me-5">
+			<div class="dropdown">
+				<a
+					class="btn btn-primary dropdown-toggle"
+					href="#"
+					role="button"
+					id="dropdownMenuLink"
+					data-bs-toggle="dropdown"
+					aria-expanded="false"
+				>
+					Filter by Status
+				</a>
+
+				<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+					<li>
+						<a class="dropdown-item" href="/order/index?status=denied"
+							>Denied</a
+						>
+					</li>
+					<li>
+						<a class="dropdown-item" href="/order/index?status=pending"
+							>Pending</a
+						>
+					</li>
+					<li>
+						<a class="dropdown-item" href="/order/index?status=approved"
+							>Approved</a
+						>
+					</li>
+					<li>
+						<a class="dropdown-item" href="/order/index?status=completed"
+							>Completed</a
+						>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-md-4 col-8 mb-3">
 			<div class="input-group">
 				<input
 					class="form-control"
@@ -12,7 +49,7 @@
 				/>
 			</div>
 		</div>
-		<div class="col-sm-3">
+		<div class="col-3">
 			<button class="btn btn-outline-success" type="submit">Search</button>
 		</div>
 	</div>

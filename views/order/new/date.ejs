@@ -1,15 +1,17 @@
 <% layout('layouts/orderTemplate') %>
 <div class="col-6 offset-3">
-	<h1>Select delivery day</h1>
-	<div class="card mb-3">
-		<div class="card-body">
-			<h5 class="card-title">Select order date</h5>
-			<form action="/cart/add/date" method="POST">
-				<input type="date" name="deliveryDate" min="<%= minDate %>" />
+	<h1 class="mb-3">Select delivery day</h1>
+	<form action="/cart/add/date" method="POST">
+		<div class="card mb-3 text-center">
+			<div class="card-body">
+				<h5 class="card-title mb-3">Select order date</h5>
+				<div class="input-group d-flex justify-content-center mb-3">
+					<input type="date" name="deliveryDate" min="<%= minDate %>" />
+				</div>
 				<div class="d-flex flex-row justify-content-end mt-3">
 					<button class="btn btn-primary btn-md">Continue</button>
 				</div>
-			</form>
+			</div>
 		</div>
-	</div>
+	</form>
 </div>

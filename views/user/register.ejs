@@ -16,7 +16,7 @@
 					type="text"
 					class="form-control"
 					id="firstname"
-					name="firstname"
+					name="user[firstname]"
 					placeholder="Firstname"
 					aria-label="First name"
 				/>
@@ -27,7 +27,7 @@
 					type="text"
 					class="form-control"
 					id="lastname"
-					name="lastname"
+					name="user[lastname]"
 					placeholder="Lastname"
 					aria-label="Last name"
 				/>
@@ -37,7 +37,7 @@
 				<input
 					class="form-control"
 					type="text"
-					name="username"
+					name="user[username]"
 					placeholder="Username"
 					id="usernameRegister"
 					required
@@ -49,7 +49,7 @@
 				<input
 					class="form-control"
 					type="password"
-					name="password"
+					name="user[password]"
 					placeholder="Password"
 					id="passwordRegister"
 					required
@@ -61,7 +61,7 @@
 				<input
 					class="form-control"
 					type="email"
-					name="email"
+					name="user[email]"
 					placeholder="Example123@email.com"
 					id="email"
 					required
@@ -73,7 +73,7 @@
 				<input
 					class="form-control"
 					type="text"
-					name="phoneNumber"
+					name="user[phoneNumber]"
 					placeholder="+1(234)567-7890"
 					id="number"
 					required
@@ -83,20 +83,14 @@
 		</div>
 		<div class="row g-3 mb-3">
 			<div class="col-12">
-				<label for="inputAddress" class="form-label">Address</label>
-				<input
-					name="address[street]"
-					type="text"
-					class="form-control"
-					id="inputAddress"
-					placeholder="1234 Main St"
-					required
-				/>
+				<label for="inputAddress" class="form-label">Address*</label>
+				<input name=location[street]" type="text" class="form-control"
+				id="inputAddress" placeholder="1234 Main St" required />
 			</div>
 			<div class="col-12">
 				<label for="inputAddress2" class="form-label">Apt/Suite/Unit</label>
 				<input
-					name="address[unit]"
+					name="location[unit]"
 					type="text"
 					class="form-control"
 					id="inputAddress2"
@@ -104,9 +98,9 @@
 				/>
 			</div>
 			<div class="col-md-6">
-				<label for="inputCity" class="form-label">City</label>
+				<label for="inputCity" class="form-label">City*</label>
 				<input
-					name="address[city]"
+					name="location[city]"
 					required
 					type="text"
 					placeholder="Miami"
@@ -115,17 +109,17 @@
 				/>
 			</div>
 			<div class="col-md-4">
-				<label for="inputState" class="form-label">State</label>
-				<select id="inputState" name="address[state]" class="form-select">
+				<label for="inputState" class="form-label">State*</label>
+				<select id="inputState" name="location[state]" class="form-select">
 					<option selected>FL</option>
 				</select>
 			</div>
 			<div class="col-md-2">
-				<label for="inputZip" class="form-label">Zip</label>
+				<label for="inputZip" class="form-label">Zip*</label>
 				<input
 					required
 					type="text"
-					name="address[zipcode]"
+					name="location[zipcode]"
 					class="form-control"
 					id="inputZip"
 				/>

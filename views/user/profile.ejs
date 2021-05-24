@@ -1,0 +1,116 @@
+<% layout('layouts/boilerplate') %>
+<form
+	class="mb-3"
+	action="/profile/update?_method=PUT"
+	method="POST"
+	class="needs-validation"
+	novalidate
+>
+	<h1 class="d-flex justify-content-center mb-3">Update Your Account</h1>
+	<div class="col-6 offset-3 mb-3">
+		<div class="row g-3 mb-3">
+			<div class="col-md-6">
+				<label class="form-label" for="firstname">Firstname*</label>
+				<input
+					type="text"
+					class="form-control"
+					id="firstname"
+					name="user[firstname]"
+					value="<%= currentUser.firstname %>"
+					placeholder="Firstname"
+					aria-label="First name"
+				/>
+			</div>
+			<div class="col-md-6">
+				<label class="form-label" for="lastname">Lastname*</label>
+				<input
+					type="text"
+					class="form-control"
+					id="lastname"
+					name="user[lastname]"
+					value="<%= currentUser.lastname %>"
+					placeholder="Lastname"
+					aria-label="Last name"
+				/>
+			</div>
+			<div class="col-md-6">
+				<label class="form-label" for="email">Email*</label>
+				<input
+					class="form-control"
+					type="email"
+					name="user[email]"
+					value="<%= currentUser.email %>"
+					placeholder="Example123@email.com"
+					id="email"
+					required
+				/>
+				<div class="valid-feedback">Looks good!</div>
+			</div>
+			<div class="col-md-6">
+				<label class="form-label" for="number">Phone Number*</label>
+				<input
+					class="form-control"
+					type="text"
+					name="user[phoneNumber]"
+					value="<%= currentUser.phoneNumber%>"
+					placeholder="+1(234)567-7890"
+					id="number"
+					required
+				/>
+				<div class="valid-feedback">Looks good!</div>
+			</div>
+		</div>
+		<div class="row g-3 mb-3">
+			<div class="col-12">
+				<label for="inputAddress" class="form-label">Address*</label>
+				<input name=location[street]" type="text" class="form-control"
+				value="<%= currentUser.location.street %>" id="inputAddress"
+				placeholder="1234 Main St" required />
+			</div>
+			<div class="col-12">
+				<label for="inputAddress2" class="form-label">Apt/Suite/Unit</label>
+				<input
+					name="location[unit]"
+					type="text"
+					class="form-control"
+					value="<%= currentUser.location.unit%>"
+					id="inputAddress2"
+					placeholder="Apartment, studio, or floor"
+				/>
+			</div>
+			<div class="col-md-6">
+				<label for="inputCity" class="form-label">City*</label>
+				<input
+					name="location[city]"
+					required
+					type="text"
+					value="<%= currentUser.location.city %>"
+					placeholder="Miami"
+					class="form-control"
+					id="inputCity"
+				/>
+			</div>
+			<div class="col-md-4">
+				<label for="inputState" class="form-label">State*</label>
+				<select id="inputState" name="location[state]" class="form-select">
+					<option selected>FL</option>
+				</select>
+			</div>
+			<div class="col-md-2">
+				<label for="inputZip" class="form-label">Zip*</label>
+				<input
+					required
+					type="text"
+					name="location[zipcode]"
+					value="<%= currentUser.location.zipcode %>"
+					class="form-control"
+					id="inputZip"
+				/>
+			</div>
+		</div>
+		<p class="d-inline me-3 mb-3">* Required Field</p>
+		<div class="col-md-6 d-inline">
+			<button class="btn btn-success">Update Account</button>
+		</div>
+	</div>
+</form>

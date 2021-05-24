@@ -21,7 +21,9 @@ const cartSchema = new Schema({
 		phoneNumber: String,
 		preferredContact: [String]
 	},
-	totalPrice: { type: Number, min: 0, default: 0 },
+	totalPrice: { type: String },
+	subtotal: { type: Number, min: 0, default: 0 },
+	tax: { type: Number, min: 0 },
 	deliveryDate: { type: Date },
 	location: {
 		street: String,
