@@ -1,22 +1,30 @@
 <% layout('layouts/admintemplate') %>
-
 <a class="btn btn-danger btn-lg" href="/order/index?status=pending">Back</a>
-<div>
-	<h1 class="d-inline">order&num; <%= order._id %></h1>
-	<p class="fs-2 fw-bold">Status&colon; <%= order.status %></p>
-</div>
-<div class="row g-3">
-	<div class="col-md-6 col-sm-12">
-		<div id="map" style="height: 300px"></div>
+<div class="card border-0 col-8 offset-2 mb-3">
+	<div class="card-body text-center">
+		<h2 class="mb-3 fs-4">order&colon; <%= order._id %></h2>
+		<p class="fst-italic fw-bold">Status&colon; <%= order.status %></p>
 	</div>
-	<div class="col-md-6 col-sm-12">
-		<div class="card mb-3">
+</div>
+<div class="row g-4">
+	<div class="col-md-6 col-sm-12 order-2 order-md-1">
+		<div id="map" class="mb-3" style="height: 300px"></div>
+		<%for(let item of order.items){ %>
+		<div class="card mb-3 shadow-sm p-3 mb-3 bg-body rounded">
+			<div class="card-body">
+				<h5 class="card-title"><%= item.product.name %> x<%=item.qty%></h5>
+				<p class="card-text text-muted"><%= item.diet %></p>
+				<p>Comment&colon; <%= item.specialInstructions %></p>
+			</div>
+		</div>
+		<% } %>
+	</div>
+	<div class="col-md-6 col-12 order-1 order-md-2">
+		<div class="row card mb-3 border-0 shadow p-3 mb-3 bg-body rounded">
 			<div class="card-body">
 				<p class="text-end m-0"><%= order.createdAt.format("mmm d, yyyy") %></p>
 				<h5 class="card-title">
-					<%= order.contact.user ? order.contact.user.firstname :
-					order.contact.firstname %> <%= order.contact.user ?
-					order.contact.user.lastname : order.contact.lastname %>
+					<%= order.contact.firstname %> <%= order.contact.lastname %>
 				</h5>
 				<p class="mb-0">
 					Delivery date: <%= order.deliveryDate.format("dddd, mmmm d, yyyy") %>
@@ -27,50 +35,63 @@
 					order.location.state %>&comma; <%= order.location.zipcode %>
 				</p>
 				<address>
-					Contact via&colon; <% for(let el of order.contact.preferredContact)
-					{%><%= el%> <% } %> <br />
 					Email&colon;
-					<a
-						href="mailto:<%= order.contact.user ? order.contact.user.email :
-                    order.contact.email %>"
-						><%= order.contact.user ? order.contact.user.email :
-						order.contact.email %></a
+					<a href="mailto:<%=order.contact.email %>"
+						><%=order.contact.email %></a
 					>
 					<br />
-					<%if(order.contact.phoneNumber){%> Phone&colon;
+					Phone&colon;
 					<a href="tel:<%= order.contact.phoneNumber %>"
 						><%= order.contact.phoneNumber %></a
 					>
-					<%}%>
 				</address>
 			</div>
 		</div>
-	</div>
-	<div class="col-12">
-		<%for(let item of order.items){ %>
-		<div class="card mb-3">
+
+		<div class="row card border-0 shadow p-3 mb-5 bg-body rounded">
 			<div class="card-body">
-				<h5 class="card-title"><%= item.product.name %> x<%=item.qty%></h5>
-				<p class="card-text text-muted"><%= item.diet %></p>
-				<p>Comment&colon; <%= item.specialInstructions %></p>
+				<div class="row">
+					<div class="col-12">
+						<p class="mb-0">
+							subtotal
+							<span class="float-end"
+								>&dollar;<%= (order.subtotal).toFixed(2) %></span
+							>
+						</p>
+					</div>
+					<div class="col-12 border-bottom border-3">
+						<p>
+							tax
+							<span class="float-end"
+								>&dollar;<%= (order.tax).toFixed(2) %></span
+							>
+						</p>
+					</div>
+					<div class="col-12">
+						<p>
+							Total
+							<span class="float-end">&dollar;<%= order.totalPrice %></span>
+						</p>
+					</div>
+				</div>
 			</div>
 		</div>
-		<% } %>
-		<form
-			class="text-end mb-3"
-			action="/order/<%= order._id %>/status"
-			method="POST"
-		>
-			<button class="btn btn-danger btn-lg" name="action" value="decline">
-				Decline
-			</button>
-			<button class="btn btn-primary btn-lg me-1 <%= order.status === "approved"
-			? 'd-none':'' %>" name="action" value="approved">Approve <button
-			class="btn btn-success btn-lg <%= order.status === "pending" ? 'd-none':''
-			%> " name="action" value="completed">Complete
-		</form>
 	</div>
 </div>
+
+<form
+	class="text-end mb-3"
+	action="/order/<%= order._id %>/status"
+	method="POST"
+>
+	<button class="btn btn-danger btn-lg" name="action" value="decline">
+		Decline
+	</button>
+	<button class="btn btn-primary btn-lg me-1 <%= order.status === "approved" ?
+	'd-none':'' %>" name="action" value="approved">Approve <button class="btn
+	btn-success btn-lg <%= order.status === "pending" ? 'd-none':'' %> "
+	name="action" value="completed">Complete
+</form>
 
 <script>
 	const mapToken = "<%-process.env.MAPBOX_TOKEN%>";

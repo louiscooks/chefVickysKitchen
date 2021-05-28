@@ -18,7 +18,7 @@
 			<% for(let item of order.items){ %>
 			<div class="col-md-4">
 				<div class="card mb-3 pt-3 border-0 shadow-sm p-3 mb-5 bg-body rounded">
-					<img src="<%= item.product.image %>" class="card-img-top" />
+					<img src="<%= item.product.image.url %>" class="card-img-top" />
 					<div class="card-body">
 						<h5 class="card-title">
 							<span><%= item.qty %></span> <%=item.product.name %><span
@@ -83,7 +83,7 @@
 			<% } else{%>
 			<p>
 				To track your order's progress
-				<a data-bs-toggle="modal" class="fw-bold text-white" data-bs-target="#loginModal">Login</a>
+				<a href="/login" class="fw-bold text-white">Login</a>
 			</p>
 			<p>If you don't have an account <a class="fw-bold text-white" href="/register">Sign up</a></p>
 			<% } %>

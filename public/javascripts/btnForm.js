@@ -1,10 +1,10 @@
 $(function () {
 	$(".btnStartOrder").click(function () {
-		$("#formStartOrder").submit();
+		$(".formStartOrder").submit();
 		return false;
 	});
-	$("#btnEndOrder").click(function () {
-		$("#formEndOrder").submit();
+	$(".btnEndOrder").click(function () {
+		$(".formEndOrder").submit();
 		return false;
 	});
 });

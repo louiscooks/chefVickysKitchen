@@ -1,14 +1,27 @@
 <% layout('layouts/boilerplate') %>
-<a class="btn btn-danger btn-lg" href="/order/history">Back</a>
-<div>
-	<h1 class="d-inline">order&num; <%= order._id %></h1>
-	<p class="d-flex justify-content-end fs-3">
-		Status&colon; <%= order.status %>
-	</p>
+<div class="mb-3">
+	<a class="btn btn-danger btn-md" href="/order/history">Back</a>
+</div>
+<div class="card border-0 col-8 offset-2 mb-3">
+	<div class="card-body text-center">
+		<h2 class="mb-3 fs-4">order&colon; <%= order._id %></h2>
+		<p class="fst-italic fw-bold">Status&colon; <%= order.status %></p>
+	</div>
 </div>
 <div class="row">
-	<div class="col-6">
+	<div class="col-md-6 col-12 order-2 order-md-1">
+		<%for(let item of order.items){ %>
 		<div class="card mb-3">
+			<div class="card-body">
+				<h5 class="card-title"><%= item.product.name %> x<%=item.qty%></h5>
+				<p class="card-text text-muted"><%= item.diet %></p>
+				<p>Comment&colon; <%= item.specialInstructions %></p>
+			</div>
+		</div>
+		<% } %>
+	</div>
+	<div class="col-md-6 col-12 order-1 order-md-2">
+		<div class="row card mb-3 border-0 shadow p-3 mb-5 bg-body rounded">
 			<div class="card-body">
 				<p class="text-end m-0"><%= order.createdAt.format("mmm d, yyyy") %></p>
 				<h5 class="card-title">
@@ -24,54 +37,50 @@
 				</p>
 				<address>
 					Email&colon;
-					<a
-						href="mailto:<%= order.contact.user ? order.contact.user.email :
-                    order.contact.email %>"
-						><%= order.contact.user ? order.contact.user.email :
-						order.contact.email %></a
-					>
+					<a><%=order.contact.email %></a>
 					<br />
 					Phone&colon;
-					<a
-						href="tel:<%= order.contact.user ? order.contact.user.phoneNumber :
-                    order.contact.phoneNumber %>"
-						><%= order.contact.user ? order.contact.user.phoneNumber :
-						order.contact.phoneNumber %></a
-					>
+					<a><%= order.contact.phoneNumber %></a>
 				</address>
 			</div>
 		</div>
-	</div>
-	<div class="col-6">
-		<%for(let item of order.items){ %> <% if(item.product) {%>
-		<div class="card mb-3">
+
+		<div class="row card border-0 shadow p-3 mb-5 bg-body rounded">
 			<div class="card-body">
-				<h5 class="card-title"><%= item.product.name %> x<%=item.qty%></h5>
-				<p class="card-text text-muted"><%= item.diet %></p>
-				<p>Comment&colon; <%= item.specialInstructions %></p>
+				<div class="row">
+					<div class="col-12">
+						<p class="mb-0">
+							subtotal
+							<span class="float-end"
+								>&dollar;<%= (order.subtotal).toFixed(2) %></span
+							>
+						</p>
+					</div>
+					<div class="col-12 border-bottom border-3">
+						<p>
+							tax
+							<span class="float-end"
+								>&dollar;<%= (order.tax).toFixed(2) %></span
+							>
+						</p>
+					</div>
+					<div class="col-12">
+						<p>
+							Total
+							<span class="float-end">&dollar;<%= order.totalPrice %></span>
+						</p>
+					</div>
+				</div>
 			</div>
 		</div>
-		<% } %> <% if(item.combo) {%>
-		<div class="card mb-3">
-			<div class="card-body">
-				<h5 class="card-title"><%= item.combo.name %> x<%=item.qty%></h5>
-				<p class="card-text text-muted"><%= item.diet %></p>
-				<p class="mb-0">Includes&colon;</p>
-				<ul>
-					<% for(let prod of item.combo.products){ %>
-					<li><%= prod.name %></li>
-					<% } %>
-				</ul>
-				<p>Comment&colon; <%= item.specialInstructions %></p>
-			</div>
-		</div>
-		<% } %> <% } %>
-		<form
-			action="/order/cancel/<%= order._id %>"
-			class="text-end mb-3"
-			method="POST"
-		>
-			<button class="btn btn-danger btn-lg">Cancel Order</button>
-		</form>
 	</div>
 </div>
+<% if(order.status !== 'approved' && order.status !== 'completed' ){%>
+<form
+	action="/order/cancel/<%= order._id %>"
+	class="text-md-end text-center mb-3"
+	method="POST"
+>
+	<button class="btn btn-danger btn-lg">Cancel Order</button>
+</form>
+<% } %>

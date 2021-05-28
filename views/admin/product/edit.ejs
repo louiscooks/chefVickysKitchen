@@ -1,5 +1,5 @@
 <% layout('layouts/admintemplate') %>
-<div class="col-6 offset-3">
+<div class="col-lg-8 col-12 offset-lg-2 mb-3">
 	<div class="card">
 		<div class="card-body">
 			<h1>Edit Product</h1>
@@ -24,7 +24,7 @@
 							/>
 						</div>
 					</div>
-					<div class="col-md-6 col-sm-12">
+					<div class="col-12">
 						<label class="form-label" for="price">Price</label>
 						<div class="input-group mb-3">
 							<span class="input-group-text">$</span>
@@ -38,17 +38,21 @@
 							/>
 						</div>
 					</div>
-					<div class="col-md-6 col-sm-12">
-						<label class="form-label" for="image">Image Url</label>
-						<div class="input-group mb-3">
-							<input
-								class="form-control"
-								type="text"
-								value="<%= product.image%>"
-								name="product[image]"
-								id="image"
-								required
+					<div class="col-md-6 col-12 mb-3">
+						<label for="">Current Image</label>
+						<div>
+							<img
+								src="<%= product.image.url %>"
+								class="img-fluid"
+								style="width: 100%; height: 20rem"
+								alt=""
 							/>
+						</div>
+					</div>
+					<div class="col-md-6 col-12">
+						<label class="form-label" for="image">Replace Image</label>
+						<div class="input-group mb-3">
+							<input type="file" name="image" id="" />
 						</div>
 					</div>
 					<div class="col-12 mb-3">
@@ -60,16 +64,9 @@
 							aria-label="Default select example"
 						>
 							<option selected class="text-muted">Select a Day...</option>
-							<option value="Sunday" <%= product.combo === "Sunday"
-							?"selected":"" %> >Sunday <option value="Monday" <%= product.combo
-							=== "Monday" ?"selected":"" %> >Monday <option value="Tuesday" <%=
-							product.combo === "Tuesday" ?"selected":"" %> >Tuesday <option
-							value="Wednesday" <%= product.combo === "Wednesday" ?"selected":""
-							%> >Wednesday <option value="Thursday" <%= product.combo ===
-							"Thursday" ?"selected":"" %> >Thursday <option value="Friday" <%=
-							product.combo === "Friday" ?"selected":"" %> >Friday <option
-							value="Saturday" <%= product.combo === "Saturday" ?"selected":""
-							%> >Saturday
+							<% for(let day of days) {%> 		
+								<option value="<%= day %>" <%= product.combo === day? 'selected': '' %> ><%= day %></option>
+							<% } %> 
 						</select>
 					</div>
 					<div class="col-12">

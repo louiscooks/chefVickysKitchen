@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const ExpressError = require("../utilities/ExpressError");
 
 module.exports.login = (req, res) => {
 	if (req.user.isAdmin === true) {
@@ -6,11 +7,19 @@ module.exports.login = (req, res) => {
 		res.redirect("/product");
 		return;
 	}
-	console.log("this is req.user", req.user);
 	req.flash("success", "Welcome Back");
 	const redirectUrl = req.session.returnTo || "/cart/menu";
 	delete req.session.returnTo;
 	res.redirect(redirectUrl);
+};
+module.exports.renderLogin = (req, res) => {
+	if (req.user) {
+		const redirectUrl = req.session.returnTo || "/cart/menu";
+		delete req.session.returnTo;
+		res.redirect(redirectUrl);
+	} else {
+		res.render("user/login");
+	}
 };
 module.exports.renderRegister = (req, res) => {
 	res.render("user/register");
@@ -27,7 +36,6 @@ module.exports.register = async (req, res, next) => {
 			location
 		});
 		const registeredUser = await User.register(acct, password);
-		console.log("user us registered", registeredUser);
 		req.login(registeredUser, (err) => {
 			if (err) return next(err);
 			const redirectUrl = req.session.returnTo || "/cart/menu";
@@ -49,7 +57,6 @@ module.exports.renderProfile = (req, res) => {
 };
 module.exports.editProfile = async (req, res) => {
 	if (req.user) {
-		console.log(req.body);
 		const user = await User.findByIdAndUpdate(
 			req.user._id,
 			{
@@ -79,9 +86,24 @@ module.exports.renderAdminRegister = (req, res) => {
 };
 module.exports.registerAdmin = async (req, res) => {
 	try {
-		const { email, username, password } = req.body;
-		const user = await new User({ email, username, isAdmin: true });
+		const { email, username, password, firstname, lastname } = req.body.user;
+		const user = await new User({
+			email,
+			username,
+			firstname,
+			lastname,
+			isAdmin: true
+		});
 		const registeredUser = await User.register(user, password);
+		const authUsers = await User.find({ isAdmin: true });
+		if (authUsers.length <= 1) {
+			req.login(registeredUser, (err) => {
+				if (err) return next(err);
+				req.flash("success", "Welcome Admin");
+				res.redirect("/product");
+				return;
+			});
+		}
 		req.flash("success", "New admin successfully created");
 		res.redirect("/admin/register");
 	} catch (e) {
@@ -91,13 +113,13 @@ module.exports.registerAdmin = async (req, res) => {
 };
 module.exports.showAdmin = async (req, res) => {
 	const users = await User.find({ isAdmin: true });
-	console.log("this is users", users);
 	res.render("user/showadmins", { users });
 };
 module.exports.removeAdmin = async (req, res) => {
 	const { id } = req.params;
 	const users = await User.findByIdAndDelete(id);
-	res.redirect("user/showadmins");
+	req.flash("success", "user has successfully been deleted");
+	res.redirect("/product");
 };
 module.exports.logoutAdmin = (req, res) => {
 	req.logout();

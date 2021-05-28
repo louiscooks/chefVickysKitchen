@@ -1,23 +1,30 @@
 <% layout('layouts/admintemplate') %>
 <div class="col">
-	<div class="row g-3">
-		<% for(let product of products){ %>
-		<div class="col-sm-12 col-md-3">
-			<div class="card mb-3 border-0">
-				<img src="<%= product.image %>" class="card-img-top" alt="..." />
-				<div class="card-body">
-					<h5 class="card-title"><%= product.name %></h5>
-					<p class="card-text">
-						<%= product.ingredients%><br /><span class="text-dark fw-bold"
-							>Unit price:</span
+	<div class="row g-2">
+		<% for(let day of days){ %>
+		<div class="row mb-3">
+			<h2 class="text-center"><%=day%></h2>
+			<% for(let product of products){ %> <%if(product.combo === day){ %>
+			<div class="col-sm-12 col-md-4">
+				<div
+					class="card mb-3 border-0 border-0 shadow-sm p-3 mb-5 bg-body rounded"
+				>
+					<img src="<%= product.image.url %>" class="card-img-top" alt="..." />
+					<div class="card-body">
+						<h5 class="card-title"><%= product.name %></h5>
+						<p class="card-text">
+							<%= product.ingredients%><br /><span class="text-dark fw-bold"
+								>Unit price:</span
+							>
+							$<%= product.price %>
+						</p>
+						<a href="/product/<%= product.id %>/view" class="btn btn-primary"
+							>More Info</a
 						>
-						$<%= product.price %>
-					</p>
-					<a href="/product/<%= product.id %>/view" class="btn btn-primary"
-						>More Info</a
-					>
+					</div>
 				</div>
 			</div>
+			<% } %> <% } %>
 		</div>
 		<% } %>
 	</div>

@@ -21,8 +21,10 @@ const cartRoutes = require("./routes/cart");
 const orderRoutes = require("./routes/order");
 const productRoutes = require("./routes/product");
 const userRoutes = require("./routes/user");
+const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/chefvicky";
+const MongoStore = require("connect-mongo");
 
-mongoose.connect("mongodb://localhost:27017/chefvicky", {
+mongoose.connect(dbUrl, {
 	useNewUrlParser: true,
 	useCreateIndex: true,
 	useUnifiedTopology: true,
@@ -47,9 +49,20 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(mongoSanitize());
 
+const secret = process.env.SECRET || "thisisnotagoodsecret";
+
+const store = MongoStore.create({
+	mongoUrl: dbUrl,
+	secret,
+	touchAfter: 24 * 60 * 60
+});
+store.on("error", function (e) {
+	console.log("SESSION STORE ERROR", e);
+});
 const sessionConfig = {
+	store,
 	name: "sess",
-	secret: "thisisnotagoodsecret",
+	secret,
 	resave: false,
 	saveUninitialized: true,
 	cookie: {
@@ -99,7 +112,8 @@ app.use(
 				"blob:",
 				"data:",
 				"https://images.unsplash.com",
-				"https://source.unsplash.com/collection/345760/1600x900"
+				"https://source.unsplash.com/collection/345760/1600x900",
+				"https://res.cloudinary.com"
 			],
 			fontSrc: ["'self'", ...fontSrcUrls]
 		}

@@ -11,7 +11,7 @@ const storage = new CloudinaryStorage({
 	cloudinary,
 	params: {
 		folder: "ChefVicky",
-		alllowedFormats: ["jpeg", "png", "jpg"]
+		allowedFormats: ["jpeg", "png", "jpg"]
 	}
 });
 

@@ -1,88 +1,31 @@
 <header>
-	<nav class="navbar navbar-dark bg-dark px-2 ">
+	<nav class="navbar navbar-dark bg-dark px-2">
 		<div class="container-md">
 			<a class="navbar-brand" href="/">Chef Vickys Kitchen</a>
 			<div class="navbar-nav d-flex flex-md-row flex-sm-wrap">
 				<div class="me-3">
-				<% if(!startOrder) {%> 
-					<form action="/order/start" id="formStartOrder" method="POST">
-				<a class="nav-link text-white fw-bold btnStartOrder" href="#">START YOUR ORDER</a>
-			</form>
-				<% } else{%> 
-					<form action="/order/end" id="formEndOrder" method="POST">
-				<a class="nav-link text-white fw-bold" href="#" id="btnEndOrder">Cancel Order</a>
-			</form>
-				<% } %> 
-			</div>
-				<% if(!currentUser) { %>
-				<!-- Button trigger modal -->
-				<div class="me-2">
-				<a
-					type="button"
-					class="btn btn-light btn-md"
-					data-bs-toggle="modal"
-					data-bs-target="#loginModal"
-				>
-					Login
-				</a>
-			</div>
-				<!-- Modal -->
-				<div
-					class="modal fade"
-					id="loginModal"
-					tabindex="-1"
-					aria-labelledby="exampleModalLabel"
-					aria-hidden="true"
-				>
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="exampleModalLabel">Login</h5>
-								<button
-									type="button"
-									class="btn-close"
-									data-bs-dismiss="modal"
-									aria-label="Close"
-								></button>
-							</div>
-							<div class="modal-body">
-								<form action="/login" method="POST" class="needs-validation" novalidate>
-								<div class="mb-3">
-									<label class="form-label" for="username">Username*</label>
-									<input
-										class="form-control"
-										type="text"
-										name="username"
-										id="username"
-										required
-									/>
-								</div>
-								<div class="mb-3">
-									<label class="form-label" for="password">Password*</label>
-									<input
-										class="form-control"
-										type="password"
-										name="password"
-										id="password"
-										required
-									/>
-								</div>
-							</div>
-							<div class="modal-footer">
-								<p class="d-inline me-auto">* Required Field</p>
-							<button class="btn btn-success">Login</button>
-						</form>
-							</div>
-						</div>
-					</div>
+					<% if(!startOrder) {%>
+					<form action="/order/start" class="formStartOrder" method="POST">
+						<a class="nav-link text-white fw-bold btnStartOrder" href="#"
+							>START YOUR ORDER</a
+						>
+					</form>
+					<% } else{%>
+					<form action="/order/end" class="formEndOrder" method="POST">
+						<a class="nav-link text-white fw-bold btnEndOrder" href="#"
+							>Cancel Order</a
+						>
+					</form>
+					<% } %>
 				</div>
-				
-				<!-- Button trigger modal -->
+				<% if(!currentUser) { %>
 				<div class="me-2">
-<a href="/register" class="btn btn-dark btn-md" >
-	Sign Up
-</a>
-</div>
+					<a href="/login" class="btn btn-light btn-md">Login</a>
+				</div>
+
+				<div class="me-2">
+					<a href="/register" class="btn btn-dark btn-md">Sign Up</a>
+				</div>
 
 				<%} else { %>
 				<a class="nav-link" href="/logout">Logout</a>
@@ -91,41 +34,41 @@
 		</div>
 	</nav>
 </header>
-<% if(!startOrder){ %> 
-	<nav class="navbar navbar-expand-md navbar-light bg-light border-bottom mb-3">
-		<div class="container-md justify-content-end">
-			<button
-				class="navbar-toggler"
-				type="button"
-				data-bs-toggle="collapse"
-				data-bs-target="#navbarNavAltMarkup"
-				aria-controls="navbarNavAltMarkup"
-				aria-expanded="false"
-				aria-label="Toggle navigation"
-			>
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+<% if(!startOrder){ %>
+<nav class="navbar navbar-expand-md navbar-light bg-light border-bottom mb-3">
+	<div class="container-md justify-content-end">
+		<button
+			class="navbar-toggler"
+			type="button"
+			data-bs-toggle="collapse"
+			data-bs-target="#navbarNavAltMarkup"
+			aria-controls="navbarNavAltMarkup"
+			aria-expanded="false"
+			aria-label="Toggle navigation"
+		>
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+			<div class="navbar-nav">
+				<div class="me-2 border-end border-start px-2">
+					<a class="nav-link" href="/cart/menu">Menu</a>
+				</div>
 				<div class="navbar-nav">
-					<div class="me-2 border-end border-start px-2">
-						<a class="nav-link" href="/cart/menu">Menu</a>
+					<% if(currentUser){ %>
+					<div class="me-2 border-end pe-2">
+						<a class="nav-link" href="/order/history">Orders</a>
 					</div>
-					<div class="navbar-nav">
-						<% if(currentUser){ %> 
-						<div class="me-2 border-end pe-2">
-							<a class="nav-link" href="/order/history">Orders</a>
-						</div>
-						<% } %> 
+					<% } %>
+				</div>
+				<div class="navbar-nav">
+					<% if(currentUser){ %>
+					<div class="me-2 border-end pe-2">
+						<a class="nav-link" href="/profile">Profile</a>
 					</div>
-					<div class="navbar-nav">
-						<% if(currentUser){ %> 
-						<div class="me-2 border-end pe-2">
-							<a class="nav-link" href="/profile">Profile</a>
-						</div>
-						<% } %> 
-					</div>
+					<% } %>
 				</div>
 			</div>
 		</div>
-	</nav>
-<% } %> 
+	</div>
+</nav>
+<% } %>

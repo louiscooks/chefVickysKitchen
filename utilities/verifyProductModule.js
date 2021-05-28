@@ -1,15 +1,13 @@
-const Cart = require("../models/cart");
 const Product = require("../models/product");
-const verifyProductModule = async (req, res) => {
+const verifyProductModule = async (req, res, storedCart) => {
 	const products = await Product.find({ combo: req.session.day });
 	// create a new empty object
-	const productsObj = {};
+	const storedCartObj = {};
 	// copy array elements to th object
-	for (let i = 0; i < products.length; i++) {
-		productsObj[products[i]._id] = products[i]._id;
+	for (let i = 0; i < storedCart.items.length; i++) {
+		storedCartObj[storedCart.items[i].product._id] = storedCart.items[i];
 	}
-	console.log("this is productsObj", productsObj);
-	const storedCart = await Cart.findById(req.session.cart);
+	console.log("this is storedCartObj", storedCartObj);
 	storedCart.items.forEach(async (el) => {
 		console.log("el._id", el.product._id);
 		let i = productsObj[el.product._id];

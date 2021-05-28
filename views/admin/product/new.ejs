@@ -1,5 +1,5 @@
 <% layout('layouts/admintemplate') %>
-<div class="col-6 offset-3">
+<div class="col-lg-8 col-12 offset-lg-2 mb-3">
 	<div class="card">
 		<div class="card-body">
 			<h1>Create Products</h1>
@@ -18,7 +18,7 @@
 					/>
 				</div>
 			</div>
-			<div class="col-md-6 col-sm-12">
+			<div class="col-lg-6 col-md-12">
 				<label for="num" class="form-label">Unit Price</label>
 				<div class="input-group mb-3">
 					<span class="input-group-text">$</span>
@@ -31,19 +31,9 @@
 					/>
 				</div>
 			</div>
-				<div class="col-md-6 col-sm-12">
-				<label for="basic-url" class="form-label">Image URL</label>
-				<div class="input-group mb-3">
-					<input type="file" name="image" id="">
-					<!-- <input
-						name="product[image]"
-						type="text"
-						class="form-control"
-						id="basic-url"
-						placeholder="https://example.com/imageUrl"
-						aria-describedby="basic-addon3"
-					/> -->
-				</div>
+				<div class="col-lg-6 col-md-12 mb-3">
+				<label for="form-file" class="form-label">Upload Image</label>
+					<input type="file" name="image" id="form-file" class="form-control">
 			</div>
 				<div class="col-12 mb-3">
 					<label for="combo" class="form-label">Add To Combo</label>
@@ -54,19 +44,19 @@
 						aria-label="Default select example"
 					>
 						<option selected class="text-muted">Select a Day...</option>
-						<option value="Sunday">Sunday</option>
-						<option value="Monday">Monday</option>
-						<option value="Tuesday">Tuesday</option>
-						<option value="Wednesday">Wednesday</option>
-						<option value="Thursday">Thursday</option>
-						<option value="Friday">Friday</option>
-						<option value="Saturday">Saturday</option>
+						<% for(let day of days) {%> 		
+						<option value="<%= day %>"><%= day %></option>
+					<% } %> 
 					</select>
 				</div>
 			</div>
 				<div class="col-12">
 				<div class="input-group mb-3">
+					<label class="form-label" for="ingredients"
+							>Product Ingredients</label
+						>
 					<textarea
+					id="ingredients"
 						name="product[ingredients]"
 						class="form-control"
 						aria-label="With textarea"

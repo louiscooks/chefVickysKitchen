@@ -1,4 +1,10 @@
-const { productSchema, userSchema } = require("../utilities/schemas");
+const {
+	productSchema,
+	userSchema,
+	adminSchema,
+	contactSchema,
+	addressSchema
+} = require("../utilities/schemas");
 const ExpressError = require("../utilities/ExpressError");
 
 module.exports.validateProduct = (req, res, next) => {
@@ -16,6 +22,39 @@ module.exports.validateUser = (req, res, next) => {
 		const msg = error.details.map((el) => el.message).join(",");
 		req.flash("error", `${msg}`);
 		res.redirect("/register");
+		return;
+	} else {
+		next();
+	}
+};
+module.exports.validateAdmin = (req, res, next) => {
+	const { error } = adminSchema.validate(req.body);
+	if (error) {
+		const msg = error.details.map((el) => el.message).join(",");
+		req.flash("error", `${msg}`);
+		res.redirect("/admin/register");
+		return;
+	} else {
+		next();
+	}
+};
+module.exports.validateContact = (req, res, next) => {
+	const { error } = contactSchema.validate(req.body);
+	if (error) {
+		const msg = error.details.map((el) => el.message).join(",");
+		req.flash("error", `${msg}`);
+		res.redirect("/order/contact");
+		return;
+	} else {
+		next();
+	}
+};
+module.exports.validateAddress = (req, res, next) => {
+	const { error } = addressSchema.validate(req.body);
+	if (error) {
+		const msg = error.details.map((el) => el.message).join(",");
+		req.flash("error", `${msg}`);
+		res.redirect("/order");
 		return;
 	} else {
 		next();

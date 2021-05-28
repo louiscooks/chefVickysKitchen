@@ -34,15 +34,7 @@ module.exports.productSchema = Joi.object({
 			.allow(null, "")
 			.escapeHTML(),
 		combo: Joi.string()
-			.valid(
-				"Sunday",
-				"Monday",
-				"Tuesday",
-				"Wednesday",
-				"Thursday",
-				"Friday",
-				"Saturday"
-			)
+			.valid("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
 			.required()
 			.escapeHTML(),
 		ingredients: Joi.string().required().escapeHTML()
@@ -58,6 +50,35 @@ module.exports.userSchema = Joi.object({
 		email: Joi.string().email().required().escapeHTML()
 	}).required(),
 	location: Joi.object({
+		street: Joi.string().required().escapeHTML(),
+		unit: Joi.string().allow(null, "").escapeHTML(),
+		city: Joi.string().required().escapeHTML(),
+		state: Joi.string().required().escapeHTML(),
+		zipcode: Joi.string().required().escapeHTML()
+	}).required()
+});
+module.exports.adminSchema = Joi.object({
+	user: Joi.object({
+		firstname: Joi.string().required().escapeHTML(),
+		lastname: Joi.string().required().escapeHTML(),
+		username: Joi.string().required().escapeHTML(),
+		password: Joi.string().required().escapeHTML(),
+		email: Joi.string().email().required().escapeHTML()
+	}).required()
+});
+module.exports.contactSchema = Joi.object({
+	user: Joi.object({
+		firstname: Joi.string().required().escapeHTML(),
+		lastname: Joi.string().required().escapeHTML(),
+		email: Joi.string().email().required().escapeHTML(),
+		phoneNumber: Joi.string().allow(null, "").escapeHTML(),
+		preferredContact: Joi.array()
+			.items(Joi.string().valid("email", "sms").required())
+			.single()
+	}).required()
+});
+module.exports.addressSchema = Joi.object({
+	address: Joi.object({
 		street: Joi.string().required().escapeHTML(),
 		unit: Joi.string().allow(null, "").escapeHTML(),
 		city: Joi.string().required().escapeHTML(),

@@ -1,45 +1,72 @@
 <% layout('layouts/admintemplate') %>
-<div class="col-4 offset-3">
-	<h1>Register</h1>
+<div class="col-lg-8 col-12 offset-lg-2 mb-3">
+	<h1 class="text-center mb-3">Register</h1>
 	<form
 		action="/admin/register"
 		method="POST"
 		class="needs-validation"
 		novalidate
 	>
-		<div class="mb-3">
-			<label class="form-label" for="username">Username</label>
-			<input
-				class="form-control"
-				type="text"
-				name="username"
-				id="username"
-				required
-			/>
-			<div class="valid-feedback">Looks good!</div>
+		<div class="row">
+			<div class="col-md-6 col-12 mb-3">
+				<label class="form-label" for="firstname">Firstname*</label>
+				<input
+					class="form-control"
+					type="text"
+					name="user[firstname]"
+					id="firstname"
+					required
+				/>
+				<div class="valid-feedback">Looks good!</div>
+			</div>
+			<div class="col-md-6 col-12 mb-3">
+				<label class="form-label" for="lastname">Lastname*</label>
+				<input
+					class="form-control"
+					type="text"
+					name="user[lastname]"
+					id="lastname"
+					required
+				/>
+				<div class="valid-feedback">Looks good!</div>
+			</div>
+			<div class="col-12 mb-3">
+				<label class="form-label" for="username">Username*</label>
+				<input
+					class="form-control"
+					type="text"
+					name="user[username]"
+					id="username"
+					required
+				/>
+				<div class="valid-feedback">Looks good!</div>
+			</div>
+			<div class="col-12 mb-3">
+				<label class="form-label" for="email">Email*</label>
+				<input
+					class="form-control"
+					type="email"
+					name="user[email]"
+					id="email"
+					required
+				/>
+				<div class="valid-feedback">Looks good!</div>
+			</div>
+			<div class="col-12 mb-3">
+				<label class="form-label" for="password">Password*</label>
+				<input
+					class="form-control"
+					type="password"
+					name="user[password]"
+					id="password"
+					required
+				/>
+				<div class="valid-feedback">Looks good!</div>
+			</div>
 		</div>
-		<div class="mb-3">
-			<label class="form-label" for="email">Email</label>
-			<input
-				class="form-control"
-				type="email"
-				name="email"
-				id="email"
-				required
-			/>
-			<div class="valid-feedback">Looks good!</div>
+		<p>* Required Field</p>
+		<div class="text-sm-end text-center">
+			<button class="btn btn-success">Register</button>
 		</div>
-		<div class="mb-3">
-			<label class="form-label" for="password">Password</label>
-			<input
-				class="form-control"
-				type="password"
-				name="password"
-				id="password"
-				required
-			/>
-			<div class="valid-feedback">Looks good!</div>
-		</div>
-		<button class="btn btn-success">Register</button>
 	</form>
 </div>

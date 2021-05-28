@@ -11,7 +11,7 @@ const authenticateUser = function (req, res, next) {
 		}
 		if (!user) {
 			req.flash("error", "Incorrect username or password.");
-			return res.redirect("/cart/menu");
+			return res.redirect("/login");
 		}
 		req.logIn(user, function (err) {
 			if (err) {
