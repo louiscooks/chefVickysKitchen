@@ -2,8 +2,8 @@
 	<nav class="navbar navbar-dark bg-dark px-2">
 		<div class="container-md">
 			<a class="navbar-brand" href="/">Chef Vickys Kitchen</a>
-			<div class="navbar-nav d-flex flex-md-row flex-sm-wrap">
-				<div class="me-3">
+			<div class="navbar-nav d-flex flex-row row align-items-center">
+				<div class="me-2 col-12 col-md-auto px-0">
 					<% if(!startOrder) {%>
 					<form action="/order/start" class="formStartOrder" method="POST">
 						<a class="nav-link text-white fw-bold btnStartOrder" href="#"
@@ -19,12 +19,12 @@
 					<% } %>
 				</div>
 				<% if(!currentUser) { %>
-				<div class="me-2">
-					<a href="/login" class="btn btn-light btn-md">Login</a>
+				<div class="me-2 col-auto px-0">
+					<a href="/login" class="btn btn-light">Login</a>
 				</div>
 
-				<div class="me-2">
-					<a href="/register" class="btn btn-dark btn-md">Sign Up</a>
+				<div class="me-2 col-auto px-0">
+					<a href="/register" class="btn btn-secondary">Sign Up</a>
 				</div>
 
 				<%} else { %>

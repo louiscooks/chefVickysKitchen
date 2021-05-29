@@ -3,7 +3,7 @@
 	<div class="row g-2">
 		<h1 class="mb-3">Menu</h1>
 		<% if(products.length === 0){%>
-		<div class="col-6 offset-3">
+		<div class="col-lg-6 col-12 offset-lg-3">
 			<div class="card">
 				<div class="card-body d-flex justify-content-end">
 					<p class="card-text me-auto">No items available for today.</p>
@@ -16,7 +16,7 @@
 				name="<%= product._id %>[_id]"
 				value="<%= product._id%>"
 			/>
-			<div class="col-md-4 col-sm-12">
+			<div class="col-lg-4 col-12">
 				<div class="card mb-3">
 					<img src="<%= product.image.url %>" class="card-img-top" />
 					<div class="card-body">
