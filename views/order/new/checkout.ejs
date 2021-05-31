@@ -1,85 +1,112 @@
-<% layout('layouts/orderTemplate') %>
+<% layout('layouts/orderTemplate') %> <% if(parseInt(cart.totalPrice) <50){ %>
+<div class="card bg-danger col-12 mb-3 checkout-info-card">
+	<div class="card-body">
+		<button type="button" class="btn-close float-end mb-3 btn-close-checkout
+		aria-label="Close" ></button>
+		<p class="card-text text-white text-center">
+			Before you continue, <br />To submit an order your total must be a minimum
+			of $50.<br />
+			Thank you, Chef Vickys Kitchen
+		</p>
+	</div>
+</div>
+<% } %>
 <h2 class="mb-3">Ready to Checkout?</h2>
 <form action="/cart/checkout/<%= cart._id %>?_method=PUT" method="POST">
-	<div class="row g-2">
+	<div class="row">
 		<div class="col-lg-6 col-12">
 			<% if(cart.items.length === 0){ %>
 			<div class="card">
 				<div class="card-body d-flex justify-content-end">
 					<p class="card-text me-auto">There are no items in your cart.</p>
-					<a class="btn btn-danger btn-md" href="/order/menu?product=true"
-						>View Menu</a
-					>
+					<a class="btn btn-danger btn-md" href="/order/menu">View Menu</a>
 				</div>
 			</div>
-			<% } %> <%for(let item of cart.items){ %>
-			<div class="card mb-3" style="max-width: 540px">
-				<div class="row g-0">
-					<div class="col-md-8">
-						<div class="card-body">
-							<h5 class="card-title"><%= item.product.name %></h5>
-							<p class="card-text">
-								<span class="text-muted"><%= item.diet %></span> <br /><%=
-								item.product.ingredients %>
-							</p>
-							<div class="mb-3">
-								<label for="qty">qty:</label>
-								<select name="<%=item._id%>[qty]" id="qty">
-									<%for(let i = 1; i<= 5; i++){ %> <option value="<%= i %>" <%=
-									item.qty === i ? 'selected' : '' %>><%= i %> <%} %>
-								</select>
-							</div>
-							<a class="remove" href="#">remove</a>
-							<div>
-								<label for="speciali">Any modifications?</label>
-								<textarea
-									class="form-control"
-									name="<%=item._id%>[specialInstructions]"
-									id="speciali"
-									cols="50"
-									rows="2"
-								>
-<%= item.specialInstructions %></textarea
-								>
-							</div>
+			<% } else{%> <%for(let item of cart.items){ %>
+			<div class="row">
+				<div class="card mb-3">
+					<div class="card-body">
+						<h5 class="card-title"><%= item.product.name %></h5>
+						<p class="card-text">
+							<span class="text-muted"><%= item.diet %></span> <br /><%=
+							item.product.ingredients %>
+						</p>
+						<div class="mb-3">
+							<label for="qty">qty:</label>
+							<select name="<%=item._id%>[qty]" id="qty">
+								<%for(let i = 1; i<= 5; i++){ %> <option value="<%= i %>" <%=
+								item.qty === i ? 'selected' : '' %>><%= i %> <%} %>
+							</select>
+						</div>
+						<a class="remove" href="#">remove</a>
+						<div>
+							<label for="speciali">Any modifications?</label>
+							<textarea
+								class="form-control"
+								name="<%=item._id%>[specialInstructions]"
+								id="speciali"
+							><%= item.specialInstructions %></textarea
+							>
 						</div>
 					</div>
 				</div>
 			</div>
-			<% } %>
+			<% } %> <% } %>
 		</div>
 		<div class="col-lg-6 col-12">
 			<div class="card mb-3">
-				<div class="row g-0">
-					<div class="col-md-8">
-						<div class="card-body">
-							<p class="card-text text-muted mb-0">
-								*Save changes made to cart before checking out*
-							</p>
-							<h5 class="card-title">YOUR CART</h5>
-							<ul
-								style="list-style-type: none; margin: 0; padding: 0"
-								class="mb-3"
-							>
+				<div class="card-body">
+					<p class="card-text text-muted mb-0">
+						*Save changes made to cart before checking out*
+					</p>
+					<h5 class="card-title mb-3">YOUR CART</h5>
+					<div class="col-lg-8 offset-lg-2 mb-3">
+						<div class="row border-bottom">
+							<div class="mb-3">
 								<%for (let item of cart.items) {%>
-								<li>
-									x<%= item.qty %> <%= item.diet %> <%= item.product ?
-									item.product.name: item.combo.name %>
-								</li>
+								<div class="col-12">
+									<p class="mb-0">
+										<%= item.diet %> <%=
+										item.product.name.substring(0,16).trim() %> x<%= item.qty %>
+										<span class="float-end"
+											>&dollar;<%= item.price.toFixed(2) %></span
+										>
+									</p>
+								</div>
 								<% } %>
-							</ul>
-							<button
-								type="submit"
-								class="btn btn-md btn-primary"
-								name="action"
-								value="update_button"
-							>
-								Save Changes
-							</button>
-							<button type="submit" class="btn btn-md btn-success" name="action"
-							<%=cart.items.length ? '' : 'disabled' %> value="checkout_button"
-							> Checkout
+							</div>
 						</div>
+						<div class="row">
+							<p class="mb-0">
+								subtotal
+								<span class="float-end"
+									>&dollar;<%= cart.subtotal.toFixed(2) %>
+								</span>
+							</p>
+							<p class="mb-0">
+								tax
+								<span class="float-end"
+									>&dollar;<%= cart.tax.toFixed(2) %>
+								</span>
+							</p>
+							<p class="mb-0">
+								Total
+								<span class="float-end">&dollar;<%= cart.totalPrice %> </span>
+							</p>
+						</div>
+					</div>
+					<div class="float-end">
+						<button
+							type="submit"
+							class="btn btn-md btn-primary"
+							name="action"
+							value="update_button"
+						>
+							Save Changes
+						</button>
+						<button type="submit" class="btn btn-md btn-success" name="action"
+						<%=cart.items.length ? '' : 'disabled' %> value="checkout_button" >
+						Checkout
 					</div>
 				</div>
 			</div>

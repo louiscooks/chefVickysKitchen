@@ -29,6 +29,11 @@ module.exports.redirectToCheckout = function (cart, req, res) {
 			res.redirect("/order/checkout");
 			return true;
 		}
+		if (parseInt(cart.totalPrice) < 50) {
+			req.flash("error", "Your order total must be a minimum of $50");
+			res.redirect("/order/checkout");
+			return true;
+		}
 		return false;
 	}
 	res.redirect("/order/checkout");

@@ -67,7 +67,7 @@ module.exports.renderDate = async function (req, res) {
 	if (month < 10) month = "0" + month.toString();
 	if (day < 10) day = "0" + day.toString();
 	if (day === 32) day = "01";
-	if (day === 32) day = "02";
+	if (day === 33) day = "02";
 	let minDate = year + "-" + month + "-" + day;
 	res.render("order/new/date", {
 		minDate
@@ -136,19 +136,16 @@ module.exports.renderReview = async function (req, res) {
 };
 module.exports.completeOrder = async function (req, res) {
 	const cart = await Cart.findById(req.session.cart);
+	if (parseInt(cart.totalPrice) < 50) {
+		req.flash("error", "Your order total must be a minimum of $50");
+		res.redirect("/order/review");
+		return;
+	}
 	const order = await new Order({
-		items: cart.items,
 		status: "pending",
-		contact: cart.contact,
-		deliveryDate: cart.deliveryDate,
-		location: cart.location,
-		geometry: cart.geometry,
-		totalPrice: cart.totalPrice,
-		subtotal: cart.subtotal,
-		tax: cart.tax
+		...cart
 	});
 	await order.save();
-
 	if (req.user) {
 		const user = await User.findById(req.user._id);
 		user.orders.push(order._id);

@@ -6,7 +6,11 @@ const resetCart = require("../middleware/resetCart");
 const cart = require("../controllers/cart");
 
 router.get("/menu", resetCart, catchAsync(cart.showMenu));
-router.post("/add/products", checkForCart, catchAsync(cart.addProductsToCart));
+router.post(
+	"/add/product/:id",
+	checkForCart,
+	catchAsync(cart.addProductsToCart)
+);
 router.post("/add/date", checkForCart, catchAsync(cart.addDateSaveDay));
 router.put("/checkout/:id", checkForCart, catchAsync(cart.finalizeCart));
 

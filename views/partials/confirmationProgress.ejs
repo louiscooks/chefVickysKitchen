@@ -1,8 +1,8 @@
-<nav class="navbar navbar-dark bg-dark px-2">
+<nav class="navbar navbar-dark bg-dark px-2 mb-3">
 	<div class="container-md">
 		<a class="navbar-brand" href="/">Chef Vickys Kitchen</a>
 		<div class="navbar-nav d-flex flex-row row align-items-center">
-			<div class="me-2 col-12 col-md-auto px-0">
+			<div class="me-sm-2 col-12 col-sm-auto">
 				<% if(!startOrder) {%>
 				<form action="/order/start" class="formStartOrder" method="POST">
 					<a class="nav-link text-white fw-bold btnStartOrder" href="#"
@@ -18,21 +18,23 @@
 				<% } %>
 			</div>
 			<% if(!currentUser) { %>
-			<div class="me-2 col-auto px-0">
+			<div class="me-sm-2 col-auto px-sm-0 pe-1">
 				<a href="/login" class="btn btn-light">Login</a>
 			</div>
 
-			<div class="me-2 col-auto px-0">
+			<div class="col-auto px-sm-0 ps-1">
 				<a href="/register" class="btn btn-secondary">Sign Up</a>
 			</div>
 
 			<%} else { %>
-			<a class="nav-link" href="/logout">Logout</a>
+			<div class="col-auto">
+				<a class="nav-link" href="/logout">Logout</a>
+			</div>
 			<% } %>
 		</div>
 	</div>				 
 </nav>
-<div class="container-md mb-3">
+<div class="container-lg mb-5">
 	<ul class="nav nav-pills nav-justified">
 		<li class="nav-item">
 			<a class="nav-link <%= url === "/order/contact" ?

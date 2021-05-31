@@ -1,8 +1,11 @@
 const dateFormat = require("../date/DateFormat");
 const Cart = require("../models/cart");
 const Product = require("../models/product");
-const verifyProductQtyModule = require("../utilities/verifyProductModule");
-
+const getTaxAndTotal = function (subtotal) {
+	let tax = subtotal * 0.07;
+	let totalPrice = (subtotal + tax).toFixed(2);
+	return { tax, totalPrice };
+};
 module.exports.showMenu = async (req, res) => {
 	const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 	const products = await Product.find();
@@ -40,46 +43,75 @@ module.exports.addDateSaveDay = async function (req, res) {
 	res.redirect("/order/menu");
 	return;
 };
+
 module.exports.addProductsToCart = async (req, res) => {
+	const { id } = req.params;
 	const storedCart = await Cart.findById(req.session.cart);
-	const products = await Product.find({ combo: req.session.day });
-	let cartObj = {};
-	for (let i = 0; i < storedCart.items.length; i++) {
-		cartObj[storedCart.items[i].product._id] = storedCart.items[i];
+	const productBody = req.body.product;
+	const product = await Product.findById(id);
+	if (!storedCart.items.length && product) {
+		let price = parseInt(productBody.qty) * parseInt(product.price);
+		storedCart.items.push({
+			product: product._id,
+			price,
+			qty: productBody.qty,
+			specialInstructions: productBody.specialInstructions.trim(),
+			diet: productBody.diet
+		});
+		storedCart.subtotal = price;
+		const reciept = getTaxAndTotal(storedCart.subtotal);
+		storedCart.tax = reciept.tax;
+		storedCart.totalPrice = reciept.totalPrice;
+		await storedCart.save();
+		req.flash("success", `${product.name} has been added to your cart.`);
+		res.redirect("/order/menu");
+		return;
 	}
-	if (products.length) {
-		products.forEach(async (el) => {
-			let itemfound = false;
-			let e = cartObj[el._id];
-			let i = req.body[el._id];
-			if (e) {
-				if (e.product._id.toString() === i._id.toString()) {
-					if (
-						e.specialInstructions === i.specialInstructions &&
-						e.diet === i.diet
-					) {
-						// increment the quantity
-						let x = i.qty;
-						let y = e.qty;
-						e.qty = parseInt(x) + parseInt(y);
-						itemfound = true;
-					}
+	if (storedCart.items.length && product) {
+		let itemfound = false;
+		let p = 0;
+		storedCart.items.forEach(async (el) => {
+			if (product.id.toString() === el.product._id.toString()) {
+				if (
+					productBody.specialInstructions.trim() ===
+						el.specialInstructions.trim() &&
+					productBody.diet === el.diet
+				) {
+					// increment the quantity
+					let x = productBody.qty;
+					let y = el.qty;
+					el.qty = parseInt(x) + parseInt(y);
+					el.price = el.qty * parseInt(product.price);
+					let a = x * parseInt(product.price);
+					storedCart.subtotal = storedCart.subtotal + a;
+					const reciept = getTaxAndTotal(storedCart.subtotal);
+					storedCart.tax = reciept.tax;
+					storedCart.totalPrice = reciept.totalPrice;
+					itemfound = true;
 				}
 			}
-			if (i && !itemfound) {
-				storedCart.items.push({
-					product: el._id,
-					qty: i.qty,
-					diet: i.diet,
-					specialInstructions: i.specialInstructions
-				});
-			}
 		});
+		if (!itemfound) {
+			let price = parseInt(productBody.qty) * parseInt(product.price);
+			storedCart.items.push({
+				product: product._id,
+				qty: productBody.qty,
+				diet: productBody.diet,
+				specialInstructions: productBody.specialInstructions.trim(),
+				price
+			});
+			let a = productBody.qty * parseInt(product.price);
+			storedCart.subtotal += a;
+			const reciept = getTaxAndTotal(storedCart.subtotal);
+			storedCart.tax = reciept.tax;
+			storedCart.totalPrice = reciept.totalPrice;
+		}
 		await storedCart.save();
 	}
-	req.flash("success", "Your order has been added to your cart.");
+	req.flash("success", `${product.name} has been added to your cart.`);
 	res.redirect("/order/menu");
 };
+
 module.exports.finalizeCart = async (req, res) => {
 	const { id } = req.params;
 	const action = req.body.action;
@@ -105,14 +137,18 @@ module.exports.finalizeCart = async (req, res) => {
 		storedCart.subtotal = p;
 		storedCart.tax = p * 0.07;
 		storedCart.totalPrice = (storedCart.subtotal + storedCart.tax).toFixed(2);
-
 		await storedCart.save();
-
+		if (parseInt(storedCart.totalPrice) < 50) {
+			req.flash("error", "Your order total must be a minimum of $50");
+			res.redirect("/order/checkout");
+			return;
+		}
 		res.redirect("/order/contact");
 	} else if (action === "update_button") {
 		storedCart.items.forEach(async (element) => {
 			let i = req.body[element._id];
 			if (!i) {
+				storedCart.subtotal = storedCart.subtotal - element.price;
 				await Cart.findByIdAndUpdate(
 					id,
 					{
@@ -123,8 +159,14 @@ module.exports.finalizeCart = async (req, res) => {
 			} else {
 				element.qty = i.qty;
 				element.specialInstructions = i.specialInstructions.trim();
+				storedCart.subtotal = storedCart.subtotal - element.price;
+				element.price = element.qty * parseInt(element.product.price);
+				storedCart.subtotal = storedCart.subtotal + element.price;
 			}
 		});
+		const reciept = getTaxAndTotal(storedCart.subtotal);
+		storedCart.tax = reciept.tax;
+		storedCart.totalPrice = reciept.totalPrice;
 		await storedCart.save();
 		req.flash("success", "Your cart has been updated successfully.");
 		res.redirect("/order/checkout");

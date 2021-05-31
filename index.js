@@ -21,6 +21,8 @@ const cartRoutes = require("./routes/cart");
 const orderRoutes = require("./routes/order");
 const productRoutes = require("./routes/product");
 const userRoutes = require("./routes/user");
+const resetCart = require("./middleware/resetCart");
+const catchAsync = require("./utilities/catchAsync");
 const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/chefvicky";
 const MongoStore = require("connect-mongo");
 
@@ -141,7 +143,7 @@ app.use((req, res, next) => {
 	next();
 });
 //home page
-app.get("/", (req, res) => {
+app.get("/", catchAsync(resetCart), (req, res) => {
 	res.render("home");
 });
 

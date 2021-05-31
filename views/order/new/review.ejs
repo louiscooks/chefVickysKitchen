@@ -1,4 +1,28 @@
-<% layout('layouts/confirmationTemplate') %>
+<% layout('layouts/confirmationTemplate') %> <% if(parseInt(cart.totalPrice)
+<50){ %>
+<div class="card bg-danger col-12 mb-3 review-info-card">
+	<div class="card-body">
+		<button
+			type="button"
+			class="btn-close float-end mb-3 btn-close-review"
+			aria-label="Close"
+		></button>
+		<div class="text-center align-items-center">
+			<p class="card-text text-white">
+				Before you continue, <br />To submit an order your total must be a
+				minimum of $50. Click
+				<a
+					class="text-white text-decoration-none fw-bold"
+					href="/order/checkout"
+					>Edit Order</a
+				>
+				to adjust your cart.<br />
+				Thank you, Chef Vickys Kitchen
+			</p>
+		</div>
+	</div>
+</div>
+<% } %>
 <h1 class="mb-3">Does everything look correct?</h1>
 <div class="row mb-3">
 	<div class="col-md-6 col-sm-12">

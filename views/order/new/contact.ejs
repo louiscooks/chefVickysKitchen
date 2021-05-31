@@ -19,7 +19,8 @@
 				class="form-control"
 				placeholder="<%= cart.contact.firstname? cart.contact.firstname:
 				'Firstname' %>"
-				value="<%= currentUser ? currentUser.firstname:''%>"
+				value="<%= currentUser ? currentUser.firstname:cart.contact.firstname?
+				cart.contact.firstname: ''%>"
 				id="firstnameCheckout"
 			/>
 		</div>
@@ -32,7 +33,8 @@
 				class="form-control"
 				placeholder="<%= cart.contact.lastname? cart.contact.lastname: 'Lastname'
 				%>"
-				value="<%= currentUser ? currentUser.lastname :'' %>"
+				value="<%= currentUser ? currentUser.lastname :cart.contact.lastname?
+				cart.contact.lastname: '' %>"
 				id="lastnameCheckout"
 			/>
 		</div>
@@ -45,8 +47,8 @@
 				class="form-control"
 				placeholder="<%=cart.contact.email? cart.contact.email:
 				'example123@domain.com' %>"
-				value="<%= currentUser ? currentUser.email :''
-				%>"
+				value="<%= currentUser ? currentUser.email :cart.contact.email?
+				cart.contact.email: ''%>"
 				id="emailCheckout"
 			/>
 		</div>
