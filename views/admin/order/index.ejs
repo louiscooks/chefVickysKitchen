@@ -76,14 +76,8 @@
 		<% if(orders.length){ %> <% for(let order of orders){%>
 		<tr>
 			<th scope="row"><%= order._id%></th>
-			<td>
-				<%= order.contact.user? order.contact.user.firstname :
-				order.contact.firstname %>
-			</td>
-			<td>
-				<%= order.contact.user? order.contact.user.lastname :
-				order.contact.lastname %>
-			</td>
+			<td><%= order.contact.firstname %></td>
+			<td><%= order.contact.lastname %></td>
 			<td>
 				<%= order.createdAt.format('dddd, mmmm d, yyyy') %> <%=
 				order.createdAt.toLocaleTimeString("en-US") %>

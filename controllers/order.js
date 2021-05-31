@@ -142,8 +142,15 @@ module.exports.completeOrder = async function (req, res) {
 		return;
 	}
 	const order = await new Order({
+		items: cart.items,
 		status: "pending",
-		...cart
+		location: cart.location,
+		deliveryDate: cart.deliveryDate,
+		totalPrice: cart.totalPrice,
+		subtotal: cart.subtotal,
+		tax: cart.tax,
+		contact: cart.contact,
+		geometry: cart.geometry
 	});
 	await order.save();
 	if (req.user) {
@@ -164,7 +171,7 @@ module.exports.completeOrder = async function (req, res) {
 		"Chef Vickys Kitchen: Your order has been submitted successfully",
 		"<h1>We have received your order!</h1><p>We are now reviewing your order to make everything is accurate.<br>Once your order is confirmed we will contact you via email and by phone to process you payment.<br>If you would like to view your order status or cancel you will have to login or email info@chefvickyskitchen.com</p>"
 	);
-	// sendMail(message);
+	sendMail(message);
 	req.flash("success", "Your order has been submitted!");
 	res.redirect("/order/success");
 };
@@ -301,7 +308,7 @@ module.exports.changeStatus = async function (req, res) {
 			"Chef Vickys Kitchen: Your order has been confirmed",
 			"<h1>We will be processing your payment!</h1><p>Your order is now confirmed. If you would like to view your order status or have an inquiry,<br> you will have to login on our site or email info@chefvickyskitchen.com</p>"
 		);
-		// sendMail(message);
+		sendMail(message);
 	}
 	if (req.body.action === "completed") {
 		order.status = "completed";
@@ -312,7 +319,7 @@ module.exports.changeStatus = async function (req, res) {
 			"Chef Vickys Kitchen: Thank you for ordering with us!",
 			"<h1>Thank you for ordering from Chef Vickys Kitchen!</h1><p>We hope that you have enjoyed your service. Please, return to our site to order again.<br>If you have an inquiry you can contact us through our site or email info@chefvickykitchen.com</p>"
 		);
-		// sendMail(message);
+		sendMail(message);
 	}
 	if (req.body.action === "decline") {
 		if (order.contact.user) {
@@ -328,7 +335,7 @@ module.exports.changeStatus = async function (req, res) {
 			"Chef Vickys Kitchen: Your order has been denied",
 			"<h1>Sorry for the inconvenience.</h1><p>Your order has been denied. if you have and questions email info@chefvickyskitchen.com.<br> Be sure to include the order number, date submitted,and full name in your email to better assist you.</p>"
 		);
-		// sendMail(message);
+		sendMail(message);
 	}
 
 	res.redirect("/order/index");
