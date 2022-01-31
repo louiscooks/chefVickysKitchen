@@ -8,7 +8,9 @@
 			<% for(let product of products){ %> <%if(product.combo === day){ %>
 			<div class="col-sm-12 col-md-4">
 				<div class="card mb-3 pt-3 border-0 shadow-sm p-3 mb-5 bg-body rounded">
-					<img src="<%= product.image.url %>" class="card-img-top" />
+					<center>
+						<img src="<%= product.image.url %>" class="card-img-top" />
+					</center>
 					<div class="card-body">
 						<h5 class="card-title"><%=product.name %></h5>
 						<p class="card-text text-muted"><%= product.ingredients%></p>
